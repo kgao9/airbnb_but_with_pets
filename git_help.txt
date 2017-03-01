@@ -1,0 +1,19 @@
+Git help
+Our git workflow is 3 branches: master, develop, and test. We each have feature branches off of test, and when we finish a feature,
+merge the feature branch with test. Every two weeks, we'll merge test with develop - test it then rebase with master.
+
+When I say rebase, use git rebase: Don't use git merge. git merge causes master to get further than develop.
+
+Note, for commit messages,
+read this link: https://chris.beams.io/posts/git-commit/
+
+For creating new branches:
+    git checkout -b <name>
+
+For checking out anyone else's work:
+    git checkout <name>
+
+If there are any hard conflicts or anything like that, ask for help.
+If the code breaks, try a hard reset and if that doesn't workout:
+git checkout <previous commit hash>
+then create a new branch and retry everything.
