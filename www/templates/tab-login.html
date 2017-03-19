@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login or Sign up</title>
+</head>
+<body ng-controller="LoginCtrl">
+<ion-pane>
+  <ion-header-bar class="bar-stable">
+    <h1 class="title">GuestBook</h1> <!-- The title bar has a title of "GuestBook" and uses an "h1" HTML tag -->
+  </ion-header-bar>
+  <ion-content>
+    <!-- First and Last name top block -->
+    <!-- As you can see here, there are two text boxes, each 50% in screen width -->
+    <!-- The left one is the first name, and the right one is the last name -->
+
+
+    <div class="bottom">
+      <div style="float: left; width: 50%;">
+        <label class="item item-input">
+          <input type="text" name="userid" id="userid-textarea" ng-model="$parent.userid" placeholder="USER ID">
+        </label>
+      </div>
+
+
+
+      <div style="float: left; width: 50%;">
+        <label class="item item-input">
+          <input type="text" name="password" id="password-textarea" ng-model="$parent.password" placeholder="PASSWORD">
+        </label>
+      </div>
+    </div>
+
+    <button class="button button-assertive" ng-click="toSignupState()">
+      Sign up
+    </button>
+
+  </ion-content>
+</ion-pane>
+</body>
+</html>
