@@ -1,20 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+<!--
+<ion-view view-title="Search">
+
+
+
+
+
     <title>Please enter the kind of pets you have and your location to search for bnb</title>
-</head>
-
-<ion-pane>
-  <ion-header-bar class="bar-stable">
-    <h1 class="title">GuestBook</h1> <!-- The title bar has a title of "GuestBook" and uses an "h1" HTML tag -->
-  </ion-header-bar>
-  <ion-content>
-    <!-- First and Last name top block -->
-    <!-- As you can see here, there are two text boxes, each 50% in screen width -->
-    <!-- The left one is the first name, and the right one is the last name -->
-
-
+    <h2 style="text-align: center">Account information Page</h2>
     <div class="bottom">
       <div style="float: left; width: 50%;">
         <label class="item item-input">
@@ -29,7 +21,7 @@
           <input type="text" name="country" id="country-textarea" ng-model="$parent.country" placeholder="Your Country">
         </label>
       </div>
-    </div>
+
 
     <div style="float: left; width: 50%;">
       <label class="item item-input">
@@ -43,6 +35,25 @@
     <button class="button button-full" ng-click="Search()">Lets find out!</button>
 
   </ion-content>
-</ion-pane>
 
-</html>
+
+</ion-view>
+//-->
+
+<ion-view view-title="Chats">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
+        <img ng-src="{{chat.face}}">
+        <h2>{{chat.name}}</h2>
+        <p>{{chat.lastText}}</p>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+
+        <ion-option-button class="button-assertive" ng-click="remove(chat)">
+          Delete
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
+

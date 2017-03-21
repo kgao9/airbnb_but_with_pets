@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Login or Sign up</title>
-</head>
-<body ng-controller="LoginCtrl">
+<ion-view view-title="Chats">
 <ion-pane>
   <ion-header-bar class="bar-stable">
-    <h1 class="title">GuestBook</h1> <!-- The title bar has a title of "GuestBook" and uses an "h1" HTML tag -->
+    <h1 class="title">Sign up or Sign in</h1> <!-- The title bar has a title of "GuestBook" and uses an "h1" HTML tag -->
   </ion-header-bar>
   <ion-content>
     <!-- First and Last name top block -->
@@ -31,6 +25,11 @@
       </div>
     </div>
 
+    <button class="button button-assertive" ng-click="toHomeState()">
+     Submit
+    </button>
+
+
     <button class="button button-assertive" ng-click="toSignupState()">
       Sign up
     </button>
@@ -38,4 +37,4 @@
   </ion-content>
 </ion-pane>
 </body>
-</html>
+</ion-view>

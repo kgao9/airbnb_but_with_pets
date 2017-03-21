@@ -58,7 +58,13 @@ starter.controller('BlogCtrl', function($scope) {
     };
 })
 
+starter.controller('LoginCtrl', function($scope, $state)
+{
+  $scope.toHomeState = function () {
 
+    $state.go("tab.dash");
+  };
+})
 // The start of the single controller that we will be using for this lab
 // It is called "mainCtrl" and is connected to the Angular module "starter"
 starter.controller('SignupCtrl', function($scope, $ionicModal, $ionicLoading,$window) {
