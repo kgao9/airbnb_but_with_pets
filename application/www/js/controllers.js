@@ -1,6 +1,15 @@
 var starter = angular.module('starter.controllers', [])
 
-starter.controller('DashCtrl', function($scope, $state)
+starter.controller('LoginCtrl', function($scope, $state) 
+{   
+    $scope.toHomeState = function () 
+    {      
+        $state.go("tab.dash");   
+    };
+
+});
+
+.controller('DashCtrl', function($scope, $state)
 {
   $scope.toAccountState = function () {
 
@@ -20,7 +29,7 @@ starter.controller('DashCtrl', function($scope, $state)
   };
 })
 
-starter.controller('ChatsCtrl', function($scope, Chats) {
+.controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -35,39 +44,32 @@ starter.controller('ChatsCtrl', function($scope, Chats) {
   };
 })
 
-starter.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
+.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-starter.controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function($scope) {
   $scope.settings = {
     enableFriends: true
   };
 })
 
-starter.controller('SearchCtrl', function($scope) {
+.controller('SearchCtrl', function($scope) {
     $scope.settings = {
       enableFriends: true
     };
 })
 
 
-starter.controller('BlogCtrl', function($scope) {
+.controller('BlogCtrl', function($scope) {
     $scope.settings = {
       enableFriends: true
     };
 })
 
-starter.controller('LoginCtrl', function($scope, $state)
-{
-  $scope.toHomeState = function () {
-
-    $state.go("tab.dash");
-  };
-})
 // The start of the single controller that we will be using for this lab
 // It is called "mainCtrl" and is connected to the Angular module "starter"
-starter.controller('SignupCtrl', function($scope, $ionicModal, $ionicLoading,$window) {
+.controller('SignupCtrl', function($scope, $ionicModal, $ionicLoading,$window) {
   $scope.firstName = ""; // Create first name string variable on controller $scope
   $scope.lastName = ""; // Create last name string variable on controller $scope
   $scope.phoneNumber = ""; // Create phone number string variable on controller $scope
