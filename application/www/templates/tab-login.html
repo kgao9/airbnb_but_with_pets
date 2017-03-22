@@ -1,0 +1,26 @@
+<ion-view view-title="Log In">
+  <ion-content class="padding">
+  <div class="bottom">
+    <div style="float:left;width:50%;">
+      <label class="itemitem-input">
+      <input type="text"name="username"id="username-textarea"
+      ng-model="$parent.username"placeholder="Username(Email)">
+      </label>
+    </div>
+
+    <div style="float:left;width:50%;">
+      <label class="itemitem-input">
+      <!--<spanclass="input-label">LastName</span>-->
+      <input type="text"name="password"id="password-textarea"
+      ng-model="$parent.password"placeholder="Password">
+    </label>
+    </div>
+  </div>
+
+  <button class="button button-full" ng-click="attemptFirebaseLogin()">Login</button>
+  <button class="button button-full" ng-click="attemptCreateFirebaseUser()">CreateUser</button>
+  <button class="button button-full" ng-model="logoutButton" ng-style="logoutButton"
+    ng-click="logoutFirebaseUser()">LogoutFirebaseuser:{{logoutButton.username}}</button>
+
+  </ion-content>
+</ion-view>
