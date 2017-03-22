@@ -1,4 +1,4 @@
-var starter = angular.module('starter.controllers', [])
+var starter = angular.module('starter.controllers', []);
 
 starter.controller('LoginCtrl', function($scope, $state) 
 {   
@@ -7,7 +7,7 @@ starter.controller('LoginCtrl', function($scope, $state)
         $state.go("tab.dash");   
     };
 
-});
+})
 
 .controller('DashCtrl', function($scope, $state)
 {
