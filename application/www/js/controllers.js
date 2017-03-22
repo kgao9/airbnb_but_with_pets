@@ -1,15 +1,72 @@
 var starter = angular.module('starter.controllers', []);
+/*
+starter.controller('LoginCtrl', function($scope, $state)
+{
+    $scope.toHomeState = function ()
+    {
+        $state.go("tab.dash");
+    };
+  $scope.toLoginState = function ()
+  {
+    $state.go("tab.login");
+  };
+})
+*/
 
-starter.controller('LoginCtrl', function($scope, $state) 
-{   
-    $scope.toHomeState = function () 
-    {      
-        $state.go("tab.dash");   
+ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state) {
+    // $scope.user = {};
+    $scope.email = "kitten@petbnb.com";
+    $scope.password = "123456";
+
+    // TODO: signin function - done
+    $scope.createUser = function(email, password) {
+      return firebase.auth().createUserWithEmailAndPassword(email,password).then(function(){
+        $ionicLoading.show({template:'Created New User!',noBackdrop:true,duration:1000});
+      }).catch(function(error){
+        var errorCode=error.code;
+        var errorMessage=error.message;
+        $ionicLoading.show({template:'Fail to Create New User! Try again!',noBackdrop:true,duration:1000});
+      });
     };
 
-})
+    // TODO: login function - not yet
+    $scope.login = function(email, password) {
+      return firebase.auth.sigInWithEmailAndPassword(email, password)
+        .catch(function(error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+        });
+    };
 
-.controller('DashCtrl', function($scope, $state)
+    // TODO: attempt create user - done
+    $scope.attemptCreateUser = function(){
+      $scope.createUser($scope.email,$scope.password);
+    };
+    // TODO: attempt login - not yet
+    $scope.attemptLogin = function(){
+      console.log("Attempting Login with Email:"+$scope.email+"|password:"+$scope.password);
+
+      $scope.login($scope.email,$scope.password).then(function(){
+        //CheckifcurrentUserisset(weweresuccesfullyabletologin)
+        if(!firebase.auth().currentUser){
+          //Showmodalwithdescriptionofevents
+          $ionicLoading.show({template:'Fail to Login! Check credentials,check connection or Create user',noBackdrop:true, duration:1000});
+          // TODO: unsuccessful login
+        } else{
+          //If successful login,thencurrentUserissetanddisplayeventmodal
+          //Showmodalwithdescriptionofevents
+          $ionicLoading.show({template:'Successfully Login with Existing User!',noBackdrop:true,duration:1000});
+          // TODO: successful login
+          // $scope.logoutButton.username=firebase.auth().currentUser.email;
+          // $scope.logoutButton.visibility='visible';
+        }
+      });
+    };
+  })
+
+
+
+starter.controller('DashCtrl', function($scope, $state)
 {
   $scope.toAccountState = function () {
 
@@ -29,7 +86,7 @@ starter.controller('LoginCtrl', function($scope, $state)
   };
 })
 
-.controller('ChatsCtrl', function($scope, Chats) {
+starter.controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -44,32 +101,34 @@ starter.controller('LoginCtrl', function($scope, $state)
   };
 })
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
+starter.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope) {
+starter.controller('AccountCtrl', function($scope) {
   $scope.settings = {
     enableFriends: true
   };
 })
 
-.controller('SearchCtrl', function($scope) {
+starter.controller('SearchCtrl', function($scope) {
     $scope.settings = {
       enableFriends: true
     };
 })
 
 
-.controller('BlogCtrl', function($scope) {
+starter.controller('BlogCtrl', function($scope) {
     $scope.settings = {
       enableFriends: true
     };
 })
+
 
 // The start of the single controller that we will be using for this lab
 // It is called "mainCtrl" and is connected to the Angular module "starter"
-.controller('SignupCtrl', function($scope, $ionicModal, $ionicLoading,$window) {
+/*
+starter.controller('SignupCtrl', function($scope, $ionicModal, $ionicLoading,$window) {
   $scope.firstName = ""; // Create first name string variable on controller $scope
   $scope.lastName = ""; // Create last name string variable on controller $scope
   $scope.phoneNumber = ""; // Create phone number string variable on controller $scope
@@ -96,7 +155,7 @@ starter.controller('LoginCtrl', function($scope, $state)
     person.id = $scope.firstName+$scope.lastName+$scope.phoneNumber+$scope.email + $scope.country + $scope.city +$scope.userid
       +$scope.password;
 
-    /* Insert your code for the following variables below */
+    Insert your code for the following variables below
     person.firstName = $scope.firstName;
     person.lastName = $scope.lastName;
     person.phoneNumber = $scope.phoneNumber;
@@ -115,7 +174,7 @@ starter.controller('LoginCtrl', function($scope, $state)
     // This function call displays a popover that says "Person Added!"
     // It is run every time someone presses the submit button and the onSubmit function runs, as it is nested within the
     // onSubmit function
-    $ionicLoading.show({ template: 'Person Added!', noBackdrop: true, duration: 1000 });
+  /*  $ionicLoading.show({ template: 'Person Added!', noBackdrop: true, duration: 1000 });
   };
 
 });
