@@ -2,8 +2,10 @@ var starter = angular.module('starter.controllers', []);
 
 starter.controller('LoginCtrl', function($scope, $state) 
 {   
+    console.log("in login ctrl\n");	
     $scope.toHomeState = function () 
-    {      
+    { 
+        console.log("in here\n");	    
         $state.go("tab.dash");   
     };
 
@@ -11,6 +13,8 @@ starter.controller('LoginCtrl', function($scope, $state)
 
 .controller('DashCtrl', function($scope, $state)
 {
+  console.log("in dash ctrl\n");
+
   $scope.toAccountState = function () {
 
     $state.go("tab.account");
@@ -38,6 +42,8 @@ starter.controller('LoginCtrl', function($scope, $state)
   //$scope.$on('$ionicView.enter', function(e) {
   //});
 
+  console.log("chats controler");
+
   $scope.chats = Chats.all();
   $scope.remove = function(chat) {
     Chats.remove(chat);
@@ -45,16 +51,19 @@ starter.controller('LoginCtrl', function($scope, $state)
 })
 
 .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
+  console.log("chat detail ctrl");
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
 .controller('AccountCtrl', function($scope) {
+  console.log("accountctrl");	 
   $scope.settings = {
     enableFriends: true
   };
 })
 
 .controller('SearchCtrl', function($scope) {
+    console.log("search ctrl");	
     $scope.settings = {
       enableFriends: true
     };
@@ -62,6 +71,7 @@ starter.controller('LoginCtrl', function($scope, $state)
 
 
 .controller('BlogCtrl', function($scope) {
+    console.log("blogctrl");	
     $scope.settings = {
       enableFriends: true
     };
@@ -70,6 +80,7 @@ starter.controller('LoginCtrl', function($scope, $state)
 // The start of the single controller that we will be using for this lab
 // It is called "mainCtrl" and is connected to the Angular module "starter"
 .controller('SignupCtrl', function($scope, $ionicModal, $ionicLoading,$window) {
+  console.log("signup ctrl");	
   $scope.firstName = ""; // Create first name string variable on controller $scope
   $scope.lastName = ""; // Create last name string variable on controller $scope
   $scope.phoneNumber = ""; // Create phone number string variable on controller $scope
