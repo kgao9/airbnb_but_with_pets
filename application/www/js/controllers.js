@@ -32,8 +32,7 @@ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state) {
 
   // TODO: login function - not yet
   $scope.login = function(email, password) {
-    return firebase.auth.sigInWithEmailAndPassword(email, password)
-      .catch(function(error) {
+    return firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
         var errorCode = error.code;
         var errorMessage = error.message;
       });
