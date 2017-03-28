@@ -17,3 +17,6 @@ If there are any hard conflicts or anything like that, ask for help.
 If the code breaks, try a hard reset and if that doesn't workout:
 git checkout <previous commit hash>
 then create a new branch and retry everything.
+
+Example of a change:
+Changed this file
