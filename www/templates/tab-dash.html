@@ -1,9 +1,23 @@
 <ion-view view-title="Weclome!">
   <ion-content class="padding">
     <h2 style="text-align: center">Welcome to Pets BnB</h2>
+    <div class="bottom">
+      <div style="float: left; width: 50%;">
+        <button class="button button-assertive" ng-click="toSearchState()">Search</button>
+      </div>
 
-    <button class="button button-assertive" ng-click="toSearchState()">Search</button>
-    <button class="button button-assertive" ng-click="toBlogState()">Blog</button>
-    <button class="button button-assertive" ng-click="toChatRoomState()">Chatroom</button>
+      <div class="bottom">
+        <div style="float: left; width: 50%;">
+          <button class="button button-assertive" ng-click="toBlogState()">Blog</button>
+        </div>
+        <div class="bottom">
+          <div style="float: left; width: 50%;">
+            <button class="button button-assertive" ng-click="toChatRoomState()">Chatroom</button>
+          </div>
+          <div class="bottom">
+            <div style="float: left; width: 50%;">
+              <button class="button button-assertive" ng-click="toAccountState()">Account Info</button>
+            </div>
+
   </ion-content>
 </ion-view>

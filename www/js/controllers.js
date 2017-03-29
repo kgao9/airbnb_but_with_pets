@@ -126,3 +126,76 @@ starter.controller('BlogCtrl', function($scope) {
     enableFriends: true
   };
 });
+
+starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading) {
+  $scope.firstName = "";
+  $scope.lastName = "";
+  $scope.phone = "";
+  $scope.email = "";
+  $scope.location = "";
+  $scope.pets = "";
+  $scope.photo = "";
+  $scope.listOfPeople = {};
+
+//Constructing the database
+  $scope.addGuestToFirebase = function(person) {
+    firebase.database().ref('/guests/' + person.id).set({
+      id: person.id,
+      firstName: person.firstName,
+      lastName: person.lastName,
+    //  email: person.email,
+      phone : person.phone,
+      location: person.location,
+      pets: person.pets,
+      photo: person.photo
+    });
+    console.log("guest added to Firebase");
+  };
+
+  $scope.retrieveGuestsFromFirebase = function() {
+    var user = firebase.auth().currentUser;
+    if (user) {
+      console.log("yes")
+      console.log(user.email)
+    }else{
+      console.log("no")
+    }
+    if (!firebase.auth().currentUser)
+    {
+      //Probably never gonna happen since user must have signed in or signed up before
+      $ionicLoading.show({ template: 'Please login to Firebase first!', noBackdrop: true, duration: 1000 });
+      return;
+    }
+    firebase.database().ref('/guests/').once('value').then(function(snapshot) {
+      //var username = snapshot.val().username;
+      if (snapshot.val() != null) $scope.listOfPeople = snapshot.val();
+      $ionicLoading.show({ template: 'Guests formal informatio has been retrieved from firebase', noBackdrop: true, duration: 1000 });
+   //   $scope.apply();
+      $scope.email=user.email;
+    });
+  };
+
+  $scope.init = function() {
+    $scope.retrieveGuestsFromFirebase();
+  };
+
+  $scope.init();
+
+  $scope.onSubmit = function () {
+    var person = {};
+    person.id = $scope.firstName+$scope.lastName+$scope.phone+$scope.email;
+    person.id = person.id.replace(/[&\/\\#,+()$~%.'":*?<>{}@]/g, '');
+    person.firstName = $scope.firstName;
+    person.lastName = $scope.lastName;
+    person.phone = $scope.phone;
+  //  person.email = $scope.email;
+    person.location=$scope.location;
+    person.pets=$scope.pets;
+    person.photo=$scope.photo;
+   // var button = FindViewById<ImageButton> (Resource.Id.myButton);
+    $scope.listOfPeople[$scope.firstName+$scope.lastName+$scope.phone+$scope.location+$scope.pets+$scope.photo] = person;
+    $scope.addGuestToFirebase(person);
+    $ionicLoading.show({ template: 'Person has been added to firebase!', noBackdrop: true, duration: 1000 });
+  };
+});
+
