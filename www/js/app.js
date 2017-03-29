@@ -161,6 +161,17 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
         controller: 'BlogCtrl'
 
 
+      })
+
+
+      .state('newPost', {
+
+        url: '/newPost',
+
+        templateUrl: 'templates/blog-newpost.html',
+
+        controller: 'NewPostCtrl'
+
       });
 
 
