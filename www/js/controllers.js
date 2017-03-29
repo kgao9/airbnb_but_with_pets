@@ -85,6 +85,8 @@ starter.controller('DashCtrl', function($scope, $state)
 
     $state.go("chats");
   };
+
+
 });
 
 starter.controller('ChatsCtrl', function($scope, Chats) {
