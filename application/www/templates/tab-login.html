@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <ion-view view-title="Chats">
 <ion-pane>
   <ion-header-bar class="bar-stable">
@@ -37,4 +38,22 @@
   </ion-content>
 </ion-pane>
 </body>
+=======
+<ion-view view-title="Login">
+    <ion-content class="padding">
+        <div class="list list-inset">
+            <label class="item item-input">
+                <input type="text" placeholder="Email" ng-model="$parent.email">
+            </label>
+            <label class="item item-input">
+                <input type="password" placeholder="Password" ng-model="$parent.password">
+            </label>
+        </div>
+
+        <div>
+            <button class="button button-block button-positive" ng-click="attemptLogin()">Login</button>
+            <button class="button button-block button-positive" ng-click="attemptCreateUser()">Sign Up</button>
+        </div>
+    </ion-content>
+>>>>>>> 115fe4612f3015184b923ffbc7963eb0c651e245
 </ion-view>

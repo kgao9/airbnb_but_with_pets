@@ -13,11 +13,18 @@ var starter = angular.module('starter.controllers', []);
  })
  */
 
-starter.controller('LoginCtrl', function($scope, $ionicLoading, $state) {
-  // $scope.user = {};
-  console.log("here")
+starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHistory, $rootScope) {
   $scope.email = "kitten@petbnb.com";
   $scope.password = "123456";
+
+  // when user logs out and reaches login page, clear all history
+  $scope.$on('$ionicView.enter', function(ev) {
+    if(ev.targetScope !== $scope){
+        $ionicHistory.clearHistory();
+        $ionicHistory.clearCache();
+    }
+  });
+
 
   // TODO: signin function - done
   $scope.createUser = function(email, password) {
@@ -40,37 +47,39 @@ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state) {
 
   $scope.attemptCreateUser = function(){
     $scope.createUser($scope.email,$scope.password);
-    $state.go("dash");
   };
-  // TODO: attempt login - not yet
+  // TODO: attempt login
   $scope.attemptLogin = function(){
     console.log("Attempting Login with Email:"+$scope.email+"|password:"+$scope.password);
 
     $scope.login($scope.email,$scope.password).then(function(){
-      //CheckifcurrentUserisset(weweresuccesfullyabletologin)
-      if(!firebase.auth().currentUser){
-        //Showmodalwithdescriptionofevents
+      //Check if current User is set(we were succesfully able to login)
+      var current_user = firebase.auth().currentUser;
+
+      if(!current_user){
+        //Show modal with description of events
         $ionicLoading.show({template:'Fail to Login! Check credentials,check connection or Create user',noBackdrop:true, duration:1000});
         // TODO: unsuccessful login
       } else{
-        //If successful login,thencurrentUserissetanddisplayeventmodal
-        //Showmodalwithdescriptionofevents
+        //If successful login,then current User is set and display event modal
+        //Show modal with description of events
         $ionicLoading.show({template:'Successfully Login with Existing User!',noBackdrop:true,duration:1000});
         // TODO: successful login
+        $state.go("dash");
         // $scope.logoutButton.username=firebase.auth().currentUser.email;
         // $scope.logoutButton.visibility='visible';
       }
     });
-    $state.go("dash");
   };
+
 });
 
-starter.controller('DashCtrl', function($scope, $state)
-{
+starter.controller('DashCtrl', function($scope, $state, $stateParams) {
   console.log("in dash ctrl\n");
+  if ($stateParams.user == null ) console.log("user email info is null")
+  else console.log("user email" + user.email);
 
   $scope.toAccountState = function () {
-
     $state.go("account");
   };
   $scope.toSearchState = function () {
@@ -86,8 +95,20 @@ starter.controller('DashCtrl', function($scope, $state)
     $state.go("chats");
   };
 
+  $scope.attemptLogout = function() {
+
+    firebase.auth().signOut().then(function() {
+        console.log("sign out user! ");
+        // $ionicLoading.show( {template: 'Logout Successful! ', noBackdrop: true, duration:1000 });
+        $state.go("login");
+    },function(error){
+        console.error('Sign out Error: ' + error);
+        ionicLoading.show( {template: 'Logout Unsuccessful! ', noBackdrop: true, duration:1000 });
+    });
+  };
 
 });
+
 
 starter.controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
@@ -108,12 +129,6 @@ starter.controller('ChatsCtrl', function($scope, Chats) {
 
 starter.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
-});
-
-starter.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
 });
 
 starter.controller('SearchCtrl', function($scope) {
@@ -152,3 +167,82 @@ starter.controller('NewPostCtrl', function($scope, $state) {
   };
 
 });
+
+starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $state) {
+  $scope.firstName = "Puppy";
+  $scope.lastName = "Dog";
+  $scope.phone = "123456";
+  $scope.email = "puppy_dog@petbnb.com";
+  $scope.location = "Madison";
+  $scope.pets = "Dog";
+  $scope.photo = "";
+
+  $scope.listOfPeople = {};
+
+//Constructing the database
+  $scope.addGuestToFirebase = function(user) {
+    // firebase.database().ref('/guests/' + user.id).set({
+    firebase.database().ref('/guests/' + user.id).set({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phone : user.phone,
+    });
+    console.log("guest added to Firebase");
+  };
+
+  $scope.retrieveGuestsFromFirebase = function() {
+    var user = firebase.auth().currentUser; // retrieve curr user
+    if (!firebase.auth().currentUser)
+    {
+      //Probably never gonna happen since user must have signed in or signed up before
+      $ionicLoading.show({ template: 'Please login to Firebase first!', noBackdrop: true, duration: 1000 });
+      console.log("not login");
+      $state.go("login");
+      return;
+    }
+    // TEST: successfully login
+    console.log("yes, log in");
+    console.log("current user is: " + user.email);
+
+    firebase.database().ref('/guests/').once('value').then(function(snapshot) {
+      var firstName = snapshot.val().firstName;
+      var lastName = snapshot.val().lastName;
+      console.log();
+      if (snapshot.val() != null) $scope.listOfPeople = snapshot.val();
+      $ionicLoading.show({ template: 'Guests formal information has been retrieved from firebase', noBackdrop: true, duration: 1000 });
+      // $scope.apply();
+      $scope.email=user.email;
+
+    });
+    // apply info on page
+
+  };
+
+  $scope.init = function() {
+    $scope.retrieveGuestsFromFirebase();
+  };
+
+  $scope.init();
+
+  $scope.editUserProfile = function () {
+    var user = {};
+    // email is unique id
+    user.id = firebase.auth().currentUser.email;
+    user.id = user.id.replace(/[&\/\\#,+()$~%.'":*?<>{}@]/g, '');
+    user.firstName = $scope.firstName;
+    user.lastName = $scope.lastName;
+    user.phone = $scope.phone;
+    user.email = $scope.email;
+    user.location = $scope.location;
+    user.pets = $scope.pets;
+    user.photo=$scope.photo;
+    // var button = FindViewById<ImageButton> (Resource.Id.myButton);
+    $scope.listOfPeople[user.id] = user;
+    $scope.addGuestToFirebase(user);
+    $ionicLoading.show({ template: 'Person has been added to firebase!', noBackdrop: true, duration: 1000 });
+    $state.go("dash"); // go back to home page
+  };
+});
+
