@@ -64,7 +64,9 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl:'templates/tab-login.html',
 
-        controller:'LoginCtrl'
+        controller:'LoginCtrl',
+
+        params: { 'user' : null }
 
       })
 
@@ -77,7 +79,7 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         abstract: true,
 
-        templateUrl: 'templates/tabs.html'
+        templateUrl: 'templates/tabs.html',
 
       })
 
@@ -92,8 +94,9 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl: 'templates/tab-dash.html',
 
-        controller: 'DashCtrl'
+        controller: 'DashCtrl',
 
+        params: { 'user' : null }
 
       })
 
@@ -117,7 +120,9 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl: 'templates/tab-chats.html',
 
-        controller: 'ChatsCtrl'
+        controller: 'ChatsCtrl',
+
+
 
       })
 
@@ -128,6 +133,7 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
         templateUrl: 'templates/chat-detail.html',
 
         controller: 'ChatDetailCtrl'
+
       })
 
 
@@ -137,7 +143,9 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl: 'templates/tab-account.html',
 
-        controller: 'AccountCtrl'
+        controller: 'AccountCtrl',
+
+        params: { 'user' : null }
 
       })
 
@@ -158,7 +166,7 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl: 'templates/tab-blog.html',
 
-        controller: 'BlogCtrl'
+        controller: 'BlogCtrl',
 
 
       })

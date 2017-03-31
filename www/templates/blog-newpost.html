@@ -1,13 +1,15 @@
 <ion-view view-title="Create New Post">
-    <ion-content>
+    <ion-content class="padding">
+        <!-- post purpose: sitter/owner-->
+
+
         <div class="list" style="float: left; width: 100%;">
-            <ion-label>Purpose: Looking for</ion-label>
-            <ion-radio value="go">pet sitters</ion-radio>
-            <ion-radio checked="false" value="go">pet owners</ion-radio>
+            <ion-label>Purpose: Looking for </ion-label>
+            <ion-radio value="petsitter" checked>Pet Sitter</ion-radio>
+            <ion-radio value="petowner" checked>Pet Owner</ion-radio>
         </div>
 
         <div class="list" style="float: left; width: 100%;">
-
             <ion-checkbox>Dog</ion-checkbox>
             <ion-checkbox>Cat</ion-checkbox>
         </div>
@@ -40,8 +42,8 @@
 
         </div>
         <!-- image upload-->
-
-        <button class="button button-full" ng-click="submit()">Submit</button>
+-->
+        <button class="button button-full" ng-click="editPostInfo()">Submit</button>
         <button class="button button-full" ng-click="cancel()">Cancel</button>
 
     </ion-content>

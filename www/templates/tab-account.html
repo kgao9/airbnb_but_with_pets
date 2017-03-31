@@ -1,8 +1,7 @@
 <ion-view view-title="Account">
   <ion-content class="padding" style="text-align: center">
-Edit Your information
-<h2 style="text-align: center">Account information Page</h2>
-    <div class="bottom">
+    <div class="list">
+      <h4> Edit Personal Profile </h4>
       <div style="float: left; width: 50%;">
         <label class="item item-input">
           <input type="text" name="firstName" id="firstName-textarea" ng-model="$parent.firstName" placeholder="Your first name">
@@ -16,8 +15,9 @@ Edit Your information
         </label>
       </div>
 
-      Your login email: {{email}}
-
+      <div aligh="left">
+        <label class="item">Your login email: {{email}}</label>
+      </div>
 
       <div style="float: left; width: 50%;">
         <label class="item item-input">
@@ -44,12 +44,11 @@ Edit Your information
         </label>
       </div>
 
-
-      <div class="bottom">
-        <div style="float: left; width: 50%;">
-          <button class="button button-assertive" ng-click="onSubmit()">Added to the database! </button>
-        </div>
     </div>
+
+      <div style="float: middle; width: 100%;">
+        <button class="button button-full button-positive" ng-click="editUserProfile()">Update to the database! </button>
+      </div>
 <!---
 need to let user insert their profile picture
       <ImageButton id="@+id/myButton"
