@@ -1,0 +1,48 @@
+<ion-view view-title="Create New Post">
+    <ion-content>
+        <div class="list" style="float: left; width: 100%;">
+            <ion-label>Purpose: Looking for</ion-label>
+            <ion-radio value="go">pet sitters</ion-radio>
+            <ion-radio checked="false" value="go">pet owners</ion-radio>
+        </div>
+
+        <div class="list" style="float: left; width: 100%;">
+
+            <ion-checkbox>Dog</ion-checkbox>
+            <ion-checkbox>Cat</ion-checkbox>
+        </div>
+
+        <div class="list">
+            <!-- location information -->
+
+            <label class="item item-input" style="float: left; width: 50%;">
+                <input type="text" name="city" id="city-textarea"
+                       ng-model="$city" placeholder="City">
+            </label>
+
+
+            <label class="item item-input" style="float: left; width: 50%;">
+                <input type="text" name="state" id="state-textarea"
+                       ng-model="$state" placeholder="State">
+            </label>
+
+            <!-- time information-->
+            <ion-item>
+                <label>Effective Until</label>
+                <ion-datetime displayFormat="MM/DD/YYYY" min="2017" max="2020-12-31" ng-model="endDate"></ion-datetime>
+            </ion-item>
+
+            <!-- additional message-->
+            <label class="item item-input">
+                <input type="text" name="message" id="message-textarea"
+                       ng-model="$message" placeholder="Enter Additional Messages">
+            </label>
+
+        </div>
+        <!-- image upload-->
+
+        <button class="button button-full" ng-click="submit()">Submit</button>
+        <button class="button button-full" ng-click="cancel()">Cancel</button>
+
+    </ion-content>
+</ion-view>

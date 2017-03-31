@@ -85,6 +85,8 @@ starter.controller('DashCtrl', function($scope, $state)
 
     $state.go("chats");
   };
+
+
 });
 
 starter.controller('ChatsCtrl', function($scope, Chats) {
@@ -121,10 +123,34 @@ starter.controller('SearchCtrl', function($scope) {
 });
 
 
-starter.controller('BlogCtrl', function($scope) {
+starter.controller('BlogCtrl', function($scope, $state) {
   $scope.settings = {
     enableFriends: true
   };
+
+  $scope.newPost = function() {
+      $state.go('newPost');
+  };
+});
+
+starter.controller('NewPostCtrl', function($scope, $state) {
+  $scope.settings = {
+    enableFriends: true
+  };
+
+  // not saving post, go back to post page
+  $scope.cancel = function() {
+    $state.go('blog');
+  };
+
+  $scope.submit = function() {
+    // TODO: save post info to firebase
+
+    // then go back to posts
+    $state.go('blog');
+
+  };
+
 });
 
 starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading) {
