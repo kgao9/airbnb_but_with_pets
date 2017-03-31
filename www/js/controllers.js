@@ -165,8 +165,7 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading) {
 
 //Constructing the database
   $scope.addGuestToFirebase = function(person) {
-    firebase.database().ref('/guests/' + person.id).set({
-      id: person.id,
+    firebase.database().ref('/guests').push().set({
       firstName: person.firstName,
       lastName: person.lastName,
     //  email: person.email,
@@ -209,8 +208,8 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading) {
 
   $scope.onSubmit = function () {
     var person = {};
-    person.id = $scope.firstName+$scope.lastName+$scope.phone+$scope.email;
-    person.id = person.id.replace(/[&\/\\#,+()$~%.'":*?<>{}@]/g, '');
+  //  person.id = $scope.firstName+$scope.lastName+$scope.phone+$scope.email;
+   // person.id = person.id.replace(/[&\/\\#,+()$~%.'":*?<>{}@]/g, '');
     person.firstName = $scope.firstName;
     person.lastName = $scope.lastName;
     person.phone = $scope.phone;
