@@ -170,7 +170,15 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
 
       })
+      .state('gps', {
 
+        url: '/gps',
+
+        templateUrl: 'templates/blog-gps.html',
+
+     //   controller: 'gpsCtrl'
+
+      })
 
       .state('newPost', {
 

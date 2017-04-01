@@ -3,17 +3,29 @@
         <!-- post purpose: sitter/owner-->
 
 
-        <div class="list" style="float: left; width: 100%;">
-            <ion-label>Purpose: Looking for </ion-label>
-            <ion-radio value="petsitter" checked>Pet Sitter</ion-radio>
-            <ion-radio value="petowner" checked>Pet Owner</ion-radio>
-        </div>
+      <div class="list" style="float: left; width: 100%;">
+        <ion-checkbox ng-repeat="item in listPets" ng-model="selectPets[item.text]" ng-change="showPets()">
+          {{ item.text }}
+        </ion-checkbox>
+      </div>
 
-        <div class="list" style="float: left; width: 100%;">
-            <ion-checkbox>Dog</ion-checkbox>
-            <ion-checkbox>Cat</ion-checkbox>
-        </div>
+      <div class="list" style="float: left; width: 100%;">
+        <ion-checkbox ng-repeat="item in listUsers" ng-model="selectUsers[item.text]" ng-change="showUsers()">
+          {{ item.text }}
+        </ion-checkbox>
+      </div>
 
+                 <li class="item item-toggle">
+                   Active
+                   <label class="toggle toggle-positive" id="active_toggle" name="active_toggle">
+                     <input type="checkbox" id="active" name="active" checked="checked">
+                     <div class="track">
+                       <div class="handle"></div>
+                     </div>
+                   </label>
+                 </li>
+
+      <button class="button button-full" ng-click="getLocation()">Location</button>
         <div class="list">
             <!-- location information -->
 
@@ -42,9 +54,10 @@
 
         </div>
         <!-- image upload-->
--->
+
         <button class="button button-full" ng-click="editPostInfo()">Submit</button>
         <button class="button button-full" ng-click="cancel()">Cancel</button>
 
     </ion-content>
 </ion-view>
+

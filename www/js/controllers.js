@@ -1,17 +1,4 @@
 var starter = angular.module('starter.controllers', []);
-/*
- starter.controller('LoginCtrl', function($scope, $state)
- {
- $scope.toHomeState = function ()
- {
- $state.go("tab.dash");
- };
- $scope.toLoginState = function ()
- {
- $state.go("tab.login");
- };
- })
- */
 
 starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHistory, $rootScope) {
   $scope.email = "kitten@petbnb.com";
@@ -148,42 +135,6 @@ starter.controller('BlogCtrl', function($scope, $state) {
   };
 });
 
-starter.controller('NewPostCtrl', function($scope, $state) {
-  $scope.settings = {
-    enableFriends: true
-  };
-
-  // not saving post, go back to post page
-  $scope.cancel = function() {
-    $state.go('blog');
-  };
-
-  $scope.submit = function() {
-    // TODO: save post info to firebase
-    var post = {};
-//    post.
-//
-//          firebase.database().ref('/guests').push().set({
-//          id: user.id,
-//          firstName: user.firstName,
-//          lastName: user.lastName,
-//          email: user.email,
-//          phone : user.phone,
-//        });
-//        console.log("guest added to Firebase");
-
-
-
-
-
-
-
-
-    // last step: then go back to posts
-    $state.go('blog');
-  }; // end of submit
-
-});
 starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $state){
    $scope.id ="";
    $scope.purpose = "";
@@ -193,10 +144,29 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
    $scope.endDate = "";
    $scope.message = "";
    $scope.active = "";
+  $scope.listPets = [
+    {text: 'Dogs'},
+    {text: 'Cats'},
+    {text: 'Fish'}
+  ];
+  $scope.listUsers = [
+    {text: 'Sitter'},
+    {text: 'Owner'}
+  ];
+  $scope.selectUsers = {};
+  $scope.selectPets = {};
+  $scope.showUsers=function(){
+    console.log($scope.selectUsers);
+  };
+  $scope.showPets=function(){
+    console.log($scope.selectPets);
+  };
+
 
   $scope.listOfPost = {};
   //post database
   $scope.addPostToFirebase = function(post) {
+
     firebase.database().ref('/posts').push().set({
       id: post.id,
       purpose: post.purpose,
@@ -209,24 +179,43 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
     });
     console.log("posts added to Firebase");
   };
+
+
+ // console.log(toggle);
+    //.getElementById("active_toggle").checked;
+  //if(toggle){
+   // console.log("checked success");
+  //}
+  //if(!toggle){
+   // console.log("checked not success");
+  //}
   $scope.editPostInfo = function () {
     var post = {};
     // email is unique id
     post.id = firebase.auth().currentUser.email;
-    post.purpose =$scope.purpose;
-    post.typePet= $scope.typePet;
+    // firebase.database().ref().child('posts').push().key;
+    console.log(post.id);
+    post.purpose =$scope.selectUsers;
+    post.typePet= $scope.selectPets;
     post.location = $scope.location;
     // var button = FindViewById<ImageButton> (Resource.Id.myButton);
     post.startDate = $scope.startDate;
     post.endDate = $scope.endDate;
     post.message = $scope.message;
     //active
-    post.active = $scope.active;
+    post.active =  document.getElementById("active").checked;
     $scope.listOfPost[post.id] = post;
     $scope.addPostToFirebase(post);
     $ionicLoading.show({ template: 'Post has been added to firebase!', noBackdrop: true, duration: 1000 });
     //$state.go("dash"); // go back to home page
 
+  };
+  $scope.getLocation = function () {
+    $state.go("gps");
+  }
+  // not saving post, go back to post page
+  $scope.cancel = function() {
+    $state.go('blog');
   };
 
 });
@@ -307,5 +296,6 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
     $ionicLoading.show({ template: 'Person has been added to firebase!', noBackdrop: true, duration: 1000 });
     $state.go("dash"); // go back to home page
   };
+
 });
 
