@@ -1,59 +1,45 @@
-<!--
 <ion-view view-title="Search">
 
-
-
-
-
-    <title>Please enter the kind of pets you have and your location to search for bnb</title>
-    <h2 style="text-align: center">Account information Page</h2>
-    <div class="bottom">
-      <div style="float: left; width: 50%;">
-        <label class="item item-input">
-          <input type="text" name="pets" id="pets-textarea" ng-model="$parent.pets" placeholder="Kind of Pet">
-        </label>
-      </div>
-
-
-
-      <div style="float: left; width: 50%;">
-        <label class="item item-input">
-          <input type="text" name="country" id="country-textarea" ng-model="$parent.country" placeholder="Your Country">
-        </label>
-      </div>
-
-
-    <div style="float: left; width: 50%;">
-      <label class="item item-input">
-        <input type="text" name="city" id="city-textarea" ng-model="$parent.city" placeholder="Your City">
-      </label>
-    </div>
-    </div>
-
-
-
-    <button class="button button-full" ng-click="Search()">Lets find out!</button>
-
-  </ion-content>
-
-
-</ion-view>
-//-->
-
-<ion-view view-title="Chats">
   <ion-content>
-    <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="chat in chats" type="item-text-wrap" href="#/tab/chats/{{chat.id}}">
-        <img ng-src="{{chat.face}}">
-        <h2>{{chat.name}}</h2>
-        <p>{{chat.lastText}}</p>
-        <i class="icon ion-chevron-right icon-accessory"></i>
+    <!-- Cher's added-->
+    <div class="list">
 
-        <ion-option-button class="button-assertive" ng-click="remove(chat)">
-          Delete
-        </ion-option-button>
-      </ion-item>
-    </ion-list>
+      <div class="item item-divider">
+        User Type
+          <ion-checkBox ng-model="owner">I'm Looking For Pet Owners</ion-checkBox>
+          <ion-checkBox ng-model="sitter">I'm Looking For Pet Sitters</ion-checkBox>
+      </div>
+
+      <div class="item item-divider">
+        Pet Type
+        <ion-checkBox ng-model="cats">I'm Looking For Cats</ion-checkBox>
+        <ion-checkBox ng-model="dogs">I'm Looking For Dogs</ion-checkBox>
+      </div>
+
+      <div class="item item-divider">
+        Location
+        <ion-label>
+        <input type="text" name="city" id="city-textarea"
+               ng-model="$parent.city" placeholder="Your City">
+        </ion-label>
+        <ion-label>
+        <input type="text" name="state" id="state-textarea"
+               ng-model="$parent.state" placeholder="Your State">
+        </ion-label>
+      </div>
+    </div>
+
+    <button class="button button-full" ng-click="Search()">Let's find out!</button>
+
+
+    <div class="">
+      <li class="button button-full" ng-repeat="user in users" ng-click="selectUser()">
+        Name: {{ user.firstName }} {{ user.lastName }}
+        Pet: {{ user.petType }}
+        Owner/Sitter: {{ user.userType }}
+      </li>
+    </div>
   </ion-content>
-</ion-view>
 
+
+</ion-view>
