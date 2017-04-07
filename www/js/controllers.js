@@ -118,11 +118,7 @@ starter.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
 });
 
-starter.controller('SearchCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
-});
+
 
 
 starter.controller('BlogCtrl', function($scope, $state) {
@@ -139,7 +135,8 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
    $scope.id ="";
    $scope.purpose = "";
    $scope.typePet = "";
-   $scope.location = "";
+   $scope.city = "";
+   $scope.state = "";
    $scope.startDate = "";
    $scope.endDate = "";
    $scope.message = "";
@@ -171,7 +168,8 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
       id: post.id,
       purpose: post.purpose,
       typePet: post.typePet,
-      location: post.location,
+      city: post.city,
+      state:post.state,
       startDate: post.startDate,
       endDate: post.endDate,
       message: post.message,
@@ -181,14 +179,6 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
   };
 
 
- // console.log(toggle);
-    //.getElementById("active_toggle").checked;
-  //if(toggle){
-   // console.log("checked success");
-  //}
-  //if(!toggle){
-   // console.log("checked not success");
-  //}
   $scope.editPostInfo = function () {
     var post = {};
     // email is unique id
@@ -197,7 +187,8 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
     console.log(post.id);
     post.purpose =$scope.selectUsers;
     post.typePet= $scope.selectPets;
-    post.location = $scope.location;
+    post.city = $scope.city;
+    post.state = $scope.state;
     // var button = FindViewById<ImageButton> (Resource.Id.myButton);
     post.startDate = $scope.startDate;
     post.endDate = $scope.endDate;
@@ -219,12 +210,75 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
   };
 
 });
+starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $state) {
+  var myUserId = firebase.auth().currentUser.email;
+  console.log(myUserId);
+  // Find all dinosaurs whose height is exactly 25 meters.
+
+  $scope.listPets = [
+    {text: 'Dogs'},
+    {text: 'Cats'},
+    {text: 'Fish'}
+  ];
+  $scope.listUsers = [
+    {text: 'Sitter'},
+    {text: 'Owner'}
+  ];
+  $scope.selectUsers = {};
+  $scope.selectPets = {};
+  $scope.showUsers=function(){
+    console.log($scope.selectUsers);
+  };
+  $scope.showPets=function(){
+    console.log($scope.selectPets);
+  };
+  $scope.Search=function () {
+    //if active equals to true
+    var ref = firebase.database().ref("posts");
+    console.log(ref);
+    var ref = firebase.database().ref("/posts");
+    ref.orderByChild("active").equalTo("true").on("child_added", function(snapshot) {
+      console.log(snapshot.key);
+    });
+
+    ref.orderByChild("id").equalTo("kitten@petbnb.com").on("child_added", function(snapshot) {
+      var allSelected = snapshot.key;
+    });
+    console.log(allSelected);
+    //Search State
+    var userState = $scope.state;
+      allSelected.orderByChild("state").equalTo(userState).on("child_added", function(snapshot) {
+        var stateSelected = snapshot.key;
+      });
+    console.log(stateSelected);
+    //Search City
+    var userCity = $scope.city;
+    stateSelected.orderByChild("city").equalTo(userCity).on("child_added", function(snapshot) {
+      var citySelected = snapshot.key;
+    });
+    console.log(citySelected);
+    //Search Type
+    var userType = $scope.purpose;
+    citySelected.orderByChild("purpose").equalTo(userType).on("child_added", function(snapshot) {
+      var finalSelected = snapshot.key;
+    });
+    console.log(finalSelected);
+  }
+
+
+
+
+
+
+
+});
 starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $state) {
   $scope.firstName = "Puppy";
   $scope.lastName = "Dog";
   $scope.phone = "123456";
   $scope.email = "puppy_dog@petbnb.com";
-  $scope.location = "Madison";
+  $scope.city = "Madison";
+  $scope.state = "WI";
   $scope.pets = "Dog";
   $scope.photo = "";
 
@@ -287,7 +341,8 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
     user.lastName = $scope.lastName;
     user.phone = $scope.phone;
     user.email = $scope.email;
-    user.location = $scope.location;
+    user.city = $scope.city;
+    user.state = $scope.state;
     user.pets = $scope.pets;
     user.photo=$scope.photo;
     // var button = FindViewById<ImageButton> (Resource.Id.myButton);
