@@ -107,8 +107,72 @@ starter.controller('ChatsCtrl', function($scope, Chats) {
   //});
 
   console.log("chats controller");
+  console.log($scope); 
 
-  $scope.chats = Chats.all();
+  var ref = firebase.database().ref('/messages_for_table');
+  var chats = [];	
+
+  $scope.email = firebase.auth().currentUser.email;	
+
+  $scope.uid = $scope.email.replace(/[&\/\\#,+()$~%.'":*?<>{}@]/g, '');
+  $scope.uid = $scope.uid.replace("_", '');	
+  
+  ref.on("value", function(messages) 
+	  {
+		  message_obj = messages.val();
+		  
+		  //user_msg_obj has {
+		  //                     <username>: 
+		  //                                   {
+		  //                                       <username of everyone they texted>: 
+		  //                                           {
+		  //                                               id: <id num>,
+		  //                                               lastText: <last msg>
+		  //                                           }
+		  //                                   }
+		  //                 }
+		  console.log($scope.uid);
+		  console.log(message_obj);
+                  console.log(message_obj[$scope.uid]);
+
+		  user_msg_objs = message_obj[$scope.uid];
+
+		  for(var user_name in user_msg_objs) 
+		  {  
+		          console.log("?");	  
+			  var chat_obj = {};
+
+			  console.log(user_msg_objs);
+			  console.log(user_name);
+			  console.log(user_msg_objs[user_name]);
+
+			  //not a property of object #skip
+			  //if (!user_msg_objs[user_name].hasOwnProperty(user_name)) 
+				//  continue;      
+			  
+			  var user_msg_obj = user_msg_objs[user_name];
+
+			  chat_obj.face = 'img/ben.png';
+			  chat_obj.name = user_name;
+			  chat_obj.lastText = user_msg_obj.lastText;
+			  chat_obj.id = user_msg_obj.id;
+			  chats.push(chat_obj);
+
+			  console.log(chats);
+		  }
+
+	          $scope.chats = chats; 
+		     	  
+	  }, 
+	  
+	          function (errorObject) 
+	  {   
+		  console.log("The read failed: " + errorObject.code); 
+	  });	
+
+  //console.log(chats);
+
+  //$scope.chats = Chats.all();
   $scope.remove = function(chat) {
     Chats.remove(chat);
   };
@@ -336,6 +400,8 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
     var user = {};
     // email is unique id
     user.id = firebase.auth().currentUser.email;
+
+    //TODO WTF	  
     user.id = user.id.replace(/[&\/\\#,+()$~%.'":*?<>{}@]/g, '');
     user.firstName = $scope.firstName;
     user.lastName = $scope.lastName;
