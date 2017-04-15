@@ -128,11 +128,13 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
       .state('chat-detail', {
 
-        url: '/chats/:chatId',
+        url: '/chats/:name',
 
         templateUrl: 'templates/chat-detail.html',
 
-        controller: 'ChatDetailCtrl'
+        controller: 'ChatDetailCtrl',
+	
+	params: {face: '', id: -1, lastText: '', name: ''}      
 
       })
 

@@ -97,7 +97,7 @@ starter.controller('DashCtrl', function($scope, $state, $stateParams) {
 });
 
 
-starter.controller('ChatsCtrl', function($scope, Chats) {
+starter.controller('ChatsCtrl', function($scope, Chats, $state) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -108,6 +108,11 @@ starter.controller('ChatsCtrl', function($scope, Chats) {
 
   console.log("chats controller");
   console.log($scope); 
+
+  $scope.viewChat = function(chat) {
+	  console.log(chat);
+	  $state.go('chat-detail', chat);
+  };	   
 
   var ref = firebase.database().ref('/messages_for_table');
   var chats = [];	
@@ -121,16 +126,6 @@ starter.controller('ChatsCtrl', function($scope, Chats) {
 	  {
 		  message_obj = messages.val();
 		  
-		  //user_msg_obj has {
-		  //                     <username>: 
-		  //                                   {
-		  //                                       <username of everyone they texted>: 
-		  //                                           {
-		  //                                               id: <id num>,
-		  //                                               lastText: <last msg>
-		  //                                           }
-		  //                                   }
-		  //                 }
 		  console.log($scope.uid);
 		  console.log(message_obj);
                   console.log(message_obj[$scope.uid]);
@@ -173,13 +168,22 @@ starter.controller('ChatsCtrl', function($scope, Chats) {
   //console.log(chats);
 
   //$scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
 });
 
-starter.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
+starter.controller('ChatDetailCtrl', function($scope, $stateParams) {
+  $scope.name = $stateParams.name;
+
+  var ref = firebase.database().ref('/all_messages');
+  $scope.email = firebase.auth().currentUser.email;	
+
+  $scope.uid = $scope.email.replace(/[&\/\\#,+()$~%.'":*?<>{}@]/g, '');   
+  $scope.uid = $scope.uid.replace("_", '');
+	
+  ref.on("value", function(messages)           {
+      message_obj = messages.val();	  
+      console.log(message_obj);	  
+      $scope.chats = message_obj[$scope.uid][$scope.name];
+  });
 });
 
 
