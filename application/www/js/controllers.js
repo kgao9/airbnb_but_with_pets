@@ -133,8 +133,9 @@ starter.controller('ChatsCtrl', function($scope, Chats, $state) {
 		  user_msg_objs = message_obj[$scope.uid];
 
 		  for(var user_name in user_msg_objs) 
-		  {  
-		          console.log("?");	  
+		  { 
+			  //TODO
+			  //refactor given the fact that firebase hands out a key for a nest 
 			  var chat_obj = {};
 
 			  console.log(user_msg_objs);
@@ -192,6 +193,10 @@ starter.controller('ChatDetailCtrl', function($scope, $stateParams) {
       var ref = firebase.database().ref('/all_messages');	  
       ref.push().set(db_msg_obj);
       console.log("msg sent");
+
+      //TODO
+      // Definitely need to update message table with last msg field
+      // need to do that after chat add button is completed  	  
   };
 	
   $scope.name = $stateParams.name;
