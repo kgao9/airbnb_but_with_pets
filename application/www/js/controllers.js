@@ -171,6 +171,29 @@ starter.controller('ChatsCtrl', function($scope, Chats, $state) {
 });
 
 starter.controller('ChatDetailCtrl', function($scope, $stateParams) {
+  $scope.sendMsg = function () {
+      var msg = document.getElementById("msg").value;
+      
+      msgObj = {};
+      msgObj.From = $scope.uid;
+      msgObj.To = $stateParams.name;
+      msgObj.Msg = msg;
+
+      var nest = {};
+      	  
+      nest[Date.now()] = msgObj;
+
+      var secondNest = {};
+      secondNest[$stateParams.name] = nest;	  
+      
+      var db_msg_obj = {};
+      db_msg_obj[$scope.uid] = secondNest;
+
+      var ref = firebase.database().ref('/all_messages');	  
+      ref.push().set(db_msg_obj);
+      console.log("msg sent");
+  };
+	
   $scope.name = $stateParams.name;
 
   var ref = firebase.database().ref('/all_messages');

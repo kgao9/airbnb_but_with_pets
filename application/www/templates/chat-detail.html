@@ -5,6 +5,7 @@
         <p>To: {{message.To}}</p>
         <p>From: {{message.From}}</p>
 	<p>{{message.Msg}}</p>
+	<!-- will need someone to implement because I have no idea how to do this -->
 	<!--<p>Sent at: {{timestamp}}</p>-->
         <i class="icon ion-chevron-right icon-accessory"></i>
 
@@ -12,6 +13,9 @@
 		delete
         </ion-option-button>
       </ion-item>
+      <input type="text" id="msg" value="Enter your Msg here"><br>
+      <button ion-button ng-click=sendMsg()>Send</button>
+      </ion-option-button>	       
     </ion-list>
   </ion-content>
 </ion-view>
