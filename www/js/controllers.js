@@ -142,6 +142,7 @@ starter.controller('BlogCtrl', function($scope, $state) {
   $scope.settings = {
     enableFriends: true
   };
+  // TODO: create a database for posts
 
   $scope.newPost = function() {
       $state.go('newPost');
@@ -160,11 +161,12 @@ starter.controller('NewPostCtrl', function($scope, $state) {
 
   $scope.submit = function() {
     // TODO: save post info to firebase
+    var post = {};
 
-    // then go back to posts
+
+    // last step: then go back to posts
     $state.go('blog');
-
-  };
+  }; // end of submit
 
 });
 
@@ -181,8 +183,7 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
 
 //Constructing the database
   $scope.addGuestToFirebase = function(user) {
-    // firebase.database().ref('/guests/' + user.id).set({
-    firebase.database().ref('/guests/' + user.id).set({
+      firebase.database().ref('/guests').push().set({
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -209,7 +210,6 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
     firebase.database().ref('/guests/').once('value').then(function(snapshot) {
       var firstName = snapshot.val().firstName;
       var lastName = snapshot.val().lastName;
-      console.log();
       if (snapshot.val() != null) $scope.listOfPeople = snapshot.val();
       $ionicLoading.show({ template: 'Guests formal information has been retrieved from firebase', noBackdrop: true, duration: 1000 });
       // $scope.apply();
@@ -245,4 +245,3 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
     $state.go("dash"); // go back to home page
   };
 });
-
