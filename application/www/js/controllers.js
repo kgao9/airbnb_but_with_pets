@@ -311,6 +311,65 @@ starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $st
   console.log(myUserId);
   // Find all dinosaurs whose height is exactly 25 meters.
 
+  /**
+  * may have to modify a bit before use
+  * It takes in a list of post objects
+  * The DB returns a json of post objects
+  * NOTE: THIS FUNCTION WILL PROBABLY NEED TO CHANGE
+  * For each post, it gets the heuristic value
+  * If the heuristic value is < thresh hold, it pushes the post
+  * Otherwise, it doesn't
+  * It will return a list of posts at the end
+  * enteredLoc is "<city>, <state>"
+  * It returns badly for off by one errors like maffison, wisconsin
+  */
+
+  $scope.heuristic = function(post, enteredLoc) {
+      //for(post_key in post)
+      //{
+          var loc = post.city + ", " + post.state;
+
+	  var size = loc.length;
+
+	  var heuristic = 0;    
+
+	  if(enteredLoc.length < size)
+              size = enteredLoc.length;
+
+	  for(var i=0; i< size; i++)
+          {
+              var locChar = loc.charAt(i);
+              var enteredLocChar = enteredLoc.charAt(i);
+
+              if(locChar === enteredLocChar)
+	          heuristic++;		  
+          }		      
+
+	  if(enteredLoc.length > loc.length)
+              heuristic += (enteredLoc.length - loc.length);
+
+	  else
+              heuristic += (loc.length - enteredLoc.length);
+
+	  return heuristic    
+		      
+      //}	       
+  };
+
+  $scope.getHeuristics = function(posts, threshHold, enteredLoc) {
+          var postsBelowHeuristic = [];
+
+	  for each(post in posts)
+	  {
+		  if(heuristic(post) < threshHold)
+			  postsBelowHeuristic.push(post, enteredLoc);
+          }		  
+
+	  return postsBelowHeuristic;
+  };
+	
+  $scope.heuristic = function()
+
   $scope.listPets = [
     {text: 'Dogs'},
     {text: 'Cats'},
@@ -320,6 +379,7 @@ starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $st
     {text: 'Sitter'},
     {text: 'Owner'}
   ];
+
   $scope.selectUsers = {};
   $scope.selectPets = {};
   $scope.showUsers=function(){
