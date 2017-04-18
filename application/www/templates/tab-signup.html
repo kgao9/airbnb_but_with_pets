@@ -1,118 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Please sign up with your personal information</title>
-</head>
-<body ng-controller="SignupCtrl">
-<ion-pane>
-  <ion-header-bar class="bar-stable">
-    <h1 class="title">Userinfo</h1> <!-- The title bar has a title of "GuestBook" and uses an "h1" HTML tag -->
-  </ion-header-bar>
-  <ion-content>
-    <!-- First and Last name top block -->
-    <!-- As you can see here, there are two text boxes, each 50% in screen width -->
-    <!-- The left one is the first name, and the right one is the last name -->
+<ion-view view-title="Sign Up">
+  <ion-content class="padding" style="text-align: center">
+    <div class="list">
+      <h4>Please sign up with your information</h4>
 
-    <!-- First Name START -->
-    <div class="bottom">
       <div style="float: left; width: 50%;">
         <label class="item item-input">
-          <input type="text" name="firstName" id="firstName-textarea" ng-model="$parent.firstName" placeholder="First Name">
+          <input type="text" name="email" id="email-textarea" ng-model="$parent.email" placeholder="Your email">
         </label>
       </div>
-      <!-- First Name END -->
 
-      <!-- Last Name START -->
       <div style="float: left; width: 50%;">
         <label class="item item-input">
-          <input type="text" name="lastName" id="lastName-textarea" ng-model="$parent.lastName" placeholder="Last Name">
+          <input type="text" name="password" id="password-textarea" ng-model="$parent.password" placeholder="Your password">
         </label>
       </div>
-    </div>
-    <!-- Last Name END -->
 
-    <!-- Use the two text boxes above as templates in your creation of the two new ones -->
-    <!-- HINT: Bind the phone number text box to "$parent.phoneNumber" and the emai text box to "$parent.email" -->
-
-    <div class="bottom">
-      <div style="float: left; width: 100%;">
+      <div style="float: left; width: 50%;">
         <label class="item item-input">
-          <input type="text" name="phoneNumber" id="phoneNumber-textarea" ng-model="$parent.phoneNumber" placeholder="Phone Number">
+          <input type="text" name="firstName" id="firstName-textarea" ng-model="$parent.firstName" placeholder="Your first name">
         </label>
       </div>
-    </div>
 
 
-    <div class="bottom">
-      <div style="float: left; width: 100%;">
+      <div style="float: left; width: 50%;">
         <label class="item item-input">
-          <input type="text" name="email" id="email-textarea" ng-model="$parent.email" placeholder="Email Address">
+          <input type="text" name="lastName" id="lastName-textarea" ng-model="$parent.lastName" placeholder="Your last name">
         </label>
       </div>
-    </div>
 
-    <div class="bottom">
-      <div style="float: left; width: 100%;">
+      <div style="float: left; width: 50%;">
         <label class="item item-input">
-          <input type="text" name="country" id="country-textarea" ng-model="$parent.country" placeholder="Country">
+          <input type="text" name="phone" id="phone-textarea" ng-model="$parent.phone" placeholder="Your phone number">
         </label>
       </div>
-    </div>
 
-    <div class="bottom">
-      <div style="float: left; width: 100%;">
+      <div style="float: left; width: 50%;">
         <label class="item item-input">
-          <input type="text" name="city" id="city-textarea" ng-model="$parent.city" placeholder="City">
+          <input type="text" name="location" id="location-textarea" ng-model="$parent.location" placeholder="Your location">
         </label>
       </div>
-    </div>
 
-    <div class="bottom">
-      <div style="float: left; width: 100%;">
+
+      <div style="float: left; width: 50%;">
         <label class="item item-input">
-          <input type="text" name="userid" id="userid-textarea" ng-model="$parent.userid" placeholder="Userid">
+          <input type="text" name="pets" id="pets-textarea" ng-model="$parent.pets" placeholder="The kind of pets you have">
         </label>
       </div>
-    </div>
 
-    <div class="bottom">
-      <div style="float: left; width: 100%;">
+      <div style="float: left; width: 50%;">
         <label class="item item-input">
-          <input type="text" name="password" id="password-textarea" ng-model="$parent.password" placeholder="Password">
+          <input type="text" name="photo" id="photo-textarea" ng-model="$parent.photo" placeholder="Profile Picture">
         </label>
       </div>
+
     </div>
 
-    <div class="bottom">
-      <div style="float: left; width: 100%;">
-        <label class="item item-input">
-          <input type="text" name="pets" id="pets-textarea" ng-model="$parent.pets" placeholder="Pets">
-        </label>
+      <div style="float: middle; width: 100%;">
+        <button class="button button-full button-positive" ng-click="signup()">Sign Up</button>
       </div>
-    </div>
+<!---
+need to let user insert their profile picture
+      <ImageButton id="@+id/myButton"
+                   layout_width="wrap_content"
+                   layout_height="wrap_content"
+                   layout_marginTop="50dip"
+                   layout_marginLeft="50dip"
+                   padding="100dip"
+                   src="@drawable/myButtonImage" />
+---->
 
 
-    <!-- What the line below does is create a button that is the width of the screen that upon click/tap
-          (notice: ng-click directive) the function "onSubmit" (which takes no parameters) is run inside the
-          controller "mainCtrl" -->
-    <!-- The button has the text "Submit" and classes of "button" and "button-full"
-          https://www.tutorialspoint.com/ionic/ionic_buttons.htm for more information -->
-    <button class="button button-full" ng-click="onSubmit()">Submit</button>
-    <ul>
-
-      <!-- Below is a very important block: it is a list of the people that are added to the array by the "onSubmit"
-           function. Notice 2 important directives: "ng-repeat" and "ng-click". As mentioned before, "ng-click" runs a
-           function on click or on tap (mobile devices). "ng-repeat" is used to repeat a HTML element and define its
-           content based on what the "ng-repeat" directive is bound to. -->
-      <!-- TODO: HTML Task 2: Fill in the blank for the "ng-repeat" and "ng-click" directives -->
-      <!-- HINT: ng-click will call a function in the controller "mainCtrl" (there are only two) AND will pass a
-                 variable to that function and ng-repeat will be bound to "listOfPeople".
-                 Syntax for ng-repeat: http://www.w3schools.com/angular/ng_ng-repeat.asp -->
-        Name: {{person.firstName}} {{person.lastName}} <br>Phone: {{person.phoneNumber}} <br>Email: {{person.email}}
-        <br>Country: {{person.country}} <br>City: {{person.city}} <br>UserID: {{person.userid}} <br>Password: {{person.password}} <br>Pets: {{person.pets}}</li>
-    </ul>
   </ion-content>
-</ion-pane>
-</body>
-</html>
+</ion-view>

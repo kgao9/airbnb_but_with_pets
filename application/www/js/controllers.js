@@ -16,11 +16,11 @@ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHi
   // TODO: signin function - done
   $scope.createUser = function(email, password) {
     return firebase.auth().createUserWithEmailAndPassword(email,password).then(function(){
-      $ionicLoading.show({template:'Created New User!',noBackdrop:true,duration:1000});
+      $ionicLoading.show({template:'Created New User!',noBackdrop:true,duration:2000});
     }).catch(function(error){
       var errorCode=error.code;
       var errorMessage=error.message;
-      $ionicLoading.show({template:'Fail to Create New User! Try again!',noBackdrop:true,duration:1000});
+      $ionicLoading.show({template:'Fail to Create New User! Try again!',noBackdrop:true,duration:2000});
     });
   };
 
@@ -33,7 +33,8 @@ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHi
   };
 
   $scope.attemptCreateUser = function(){
-    $scope.createUser($scope.email,$scope.password);
+    //$scope.createUser($scope.email,$scope.password);
+    $state.go("signup");
   };
   // TODO: attempt login
   $scope.attemptLogin = function(){
@@ -45,12 +46,12 @@ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHi
 
       if(!current_user){
         //Show modal with description of events
-        $ionicLoading.show({template:'Fail to Login! Check credentials,check connection or Create user',noBackdrop:true, duration:1000});
+        $ionicLoading.show({template:'Fail to Login! Check credentials,check connection or Create user',noBackdrop:true, duration:2000});
         // TODO: unsuccessful login
       } else{
         //If successful login,then current User is set and display event modal
         //Show modal with description of events
-        $ionicLoading.show({template:'Successfully Login with Existing User!',noBackdrop:true,duration:1000});
+        $ionicLoading.show({template:'Successfully Login with Existing User!',noBackdrop:true,duration:2000});
         // TODO: successful login
         $state.go("dash");
         // $scope.logoutButton.username=firebase.auth().currentUser.email;
@@ -59,6 +60,30 @@ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHi
     });
   };
 
+});
+
+starter.controller('SignupCtrl', function($scope, $ionicLoading, $state, $ionicHistory, $rootScope) {
+  $scope.email="";
+  $scope.password="";
+  $scope.firstName="";
+  $scope.lastName="";
+  $scope.phone="";
+  $scope.location="";
+  $scope.pets="";
+  $scope.photo="";
+
+  $scope.signup = function() {
+    return firebase.auth().createUserWithEmailAndPassword($scope.email,$scope.password).then(function(){
+      $ionicLoading.show({template:'Created New User!',noBackdrop:true,duration:2000});
+      $state.go("login");
+    }).catch(function(error){
+      var errorCode=error.code;
+      var errorMessage=error.message;
+      console.log(errorMessage);
+      $ionicLoading.show({template:'Fail to Create New User! Try again!',noBackdrop:true,duration:2000});
+      $state.go("login");
+    });
+  }
 });
 
 starter.controller('DashCtrl', function($scope, $state, $stateParams) {
@@ -86,11 +111,11 @@ starter.controller('DashCtrl', function($scope, $state, $stateParams) {
 
     firebase.auth().signOut().then(function() {
         console.log("sign out user! ");
-        // $ionicLoading.show( {template: 'Logout Successful! ', noBackdrop: true, duration:1000 });
+        // $ionicLoading.show( {template: 'Logout Successful! ', noBackdrop: true, duration:2000 });
         $state.go("login");
     },function(error){
         console.error('Sign out Error: ' + error);
-        ionicLoading.show( {template: 'Logout Unsuccessful! ', noBackdrop: true, duration:1000 });
+        ionicLoading.show( {template: 'Logout Unsuccessful! ', noBackdrop: true, duration:2000 });
     });
   };
 
@@ -107,35 +132,35 @@ starter.controller('ChatsCtrl', function($scope, Chats, $state) {
   //});
 
   console.log("chats controller");
-  console.log($scope); 
+  console.log($scope);
 
   $scope.viewChat = function(chat) {
 	  console.log(chat);
 	  $state.go('chat-detail', chat);
-  };	   
+  };
 
   var ref = firebase.database().ref('/messages_for_table');
-  var chats = [];	
+  var chats = [];
 
-  $scope.email = firebase.auth().currentUser.email;	
+  $scope.email = firebase.auth().currentUser.email;
 
   $scope.uid = $scope.email.replace(/[&\/\\#,+()$~%.'":*?<>{}@]/g, '');
-  $scope.uid = $scope.uid.replace("_", '');	
-  
-  ref.on("value", function(messages) 
+  $scope.uid = $scope.uid.replace("_", '');
+
+  ref.on("value", function(messages)
 	  {
 		  message_obj = messages.val();
-		  
+
 		  console.log($scope.uid);
 		  console.log(message_obj);
                   console.log(message_obj[$scope.uid]);
 
 		  user_msg_objs = message_obj[$scope.uid];
 
-		  for(var user_name in user_msg_objs) 
-		  { 
+		  for(var user_name in user_msg_objs)
+		  {
 			  //TODO
-			  //refactor given the fact that firebase hands out a key for a nest 
+			  //refactor given the fact that firebase hands out a key for a nest
 			  var chat_obj = {};
 
 			  console.log(user_msg_objs);
@@ -143,9 +168,9 @@ starter.controller('ChatsCtrl', function($scope, Chats, $state) {
 			  console.log(user_msg_objs[user_name]);
 
 			  //not a property of object #skip
-			  //if (!user_msg_objs[user_name].hasOwnProperty(user_name)) 
-				//  continue;      
-			  
+			  //if (!user_msg_objs[user_name].hasOwnProperty(user_name))
+				//  continue;
+
 			  var user_msg_obj = user_msg_objs[user_name];
 
 			  chat_obj.face = 'img/ben.png';
@@ -157,14 +182,14 @@ starter.controller('ChatsCtrl', function($scope, Chats, $state) {
 			  console.log(chats);
 		  }
 
-	          $scope.chats = chats; 
-		     	  
-	  }, 
-	  
-	          function (errorObject) 
-	  {   
-		  console.log("The read failed: " + errorObject.code); 
-	  });	
+	          $scope.chats = chats;
+
+	  },
+
+	          function (errorObject)
+	  {
+		  console.log("The read failed: " + errorObject.code);
+	  });
 
   //console.log(chats);
 
@@ -174,42 +199,42 @@ starter.controller('ChatsCtrl', function($scope, Chats, $state) {
 starter.controller('ChatDetailCtrl', function($scope, $stateParams) {
   $scope.sendMsg = function () {
       var msg = document.getElementById("msg").value;
-      
+
       msgObj = {};
       msgObj.From = $scope.uid;
       msgObj.To = $stateParams.name;
       msgObj.Msg = msg;
 
       var nest = {};
-      	  
+
       nest[Date.now()] = msgObj;
 
       var secondNest = {};
-      secondNest[$stateParams.name] = nest;	  
-      
+      secondNest[$stateParams.name] = nest;
+
       var db_msg_obj = {};
       db_msg_obj[$scope.uid] = secondNest;
 
-      var ref = firebase.database().ref('/all_messages');	  
+      var ref = firebase.database().ref('/all_messages');
       ref.push().set(db_msg_obj);
       console.log("msg sent");
 
       //TODO
       // Definitely need to update message table with last msg field
-      // need to do that after chat add button is completed  	  
+      // need to do that after chat add button is completed
   };
-	
+
   $scope.name = $stateParams.name;
 
   var ref = firebase.database().ref('/all_messages');
-  $scope.email = firebase.auth().currentUser.email;	
+  $scope.email = firebase.auth().currentUser.email;
 
-  $scope.uid = $scope.email.replace(/[&\/\\#,+()$~%.'":*?<>{}@]/g, '');   
+  $scope.uid = $scope.email.replace(/[&\/\\#,+()$~%.'":*?<>{}@]/g, '');
   $scope.uid = $scope.uid.replace("_", '');
-	
+
   ref.on("value", function(messages)           {
-      message_obj = messages.val();	  
-      console.log(message_obj);	  
+      message_obj = messages.val();
+      console.log(message_obj);
       $scope.chats = message_obj[$scope.uid][$scope.name];
   });
 });
@@ -293,7 +318,7 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
     post.active =  document.getElementById("active").checked;
     $scope.listOfPost[post.id] = post;
     $scope.addPostToFirebase(post);
-    $ionicLoading.show({ template: 'Post has been added to firebase!', noBackdrop: true, duration: 1000 });
+    $ionicLoading.show({ template: 'Post has been added to firebase!', noBackdrop: true, duration: 2000 });
     //$state.go("dash"); // go back to home page
 
   };
@@ -311,65 +336,6 @@ starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $st
   console.log(myUserId);
   // Find all dinosaurs whose height is exactly 25 meters.
 
-  /**
-  * may have to modify a bit before use
-  * It takes in a list of post objects
-  * The DB returns a json of post objects
-  * NOTE: THIS FUNCTION WILL PROBABLY NEED TO CHANGE
-  * For each post, it gets the heuristic value
-  * If the heuristic value is < thresh hold, it pushes the post
-  * Otherwise, it doesn't
-  * It will return a list of posts at the end
-  * enteredLoc is "<city>, <state>"
-  * It returns badly for off by one errors like maffison, wisconsin
-  */
-
-  $scope.heuristic = function(post, enteredLoc) {
-      //for(post_key in post)
-      //{
-          var loc = post.city + ", " + post.state;
-
-	  var size = loc.length;
-
-	  var heuristic = 0;    
-
-	  if(enteredLoc.length < size)
-              size = enteredLoc.length;
-
-	  for(var i=0; i< size; i++)
-          {
-              var locChar = loc.charAt(i);
-              var enteredLocChar = enteredLoc.charAt(i);
-
-              if(locChar === enteredLocChar)
-	          heuristic++;		  
-          }		      
-
-	  if(enteredLoc.length > loc.length)
-              heuristic += (enteredLoc.length - loc.length);
-
-	  else
-              heuristic += (loc.length - enteredLoc.length);
-
-	  return heuristic    
-		      
-      //}	       
-  };
-
-  $scope.getHeuristics = function(posts, threshHold, enteredLoc) {
-          var postsBelowHeuristic = [];
-
-	  for each(post in posts)
-	  {
-		  if(heuristic(post) < threshHold)
-			  postsBelowHeuristic.push(post, enteredLoc);
-          }		  
-
-	  return postsBelowHeuristic;
-  };
-	
-  $scope.heuristic = function()
-
   $scope.listPets = [
     {text: 'Dogs'},
     {text: 'Cats'},
@@ -379,7 +345,6 @@ starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $st
     {text: 'Sitter'},
     {text: 'Owner'}
   ];
-
   $scope.selectUsers = {};
   $scope.selectPets = {};
   $scope.showUsers=function(){
@@ -459,7 +424,7 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
     if (!firebase.auth().currentUser)
     {
       //Probably never gonna happen since user must have signed in or signed up before
-      $ionicLoading.show({ template: 'Please login to Firebase first!', noBackdrop: true, duration: 1000 });
+      $ionicLoading.show({ template: 'Please login to Firebase first!', noBackdrop: true, duration: 2000 });
       console.log("not login");
       $state.go("login");
       return;
@@ -473,7 +438,7 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
       var lastName = snapshot.val().lastName;
       console.log();
       if (snapshot.val() != null) $scope.listOfPeople = snapshot.val();
-      $ionicLoading.show({ template: 'Guests formal information has been retrieved from firebase', noBackdrop: true, duration: 1000 });
+      $ionicLoading.show({ template: 'Guests formal information has been retrieved from firebase', noBackdrop: true, duration: 2000 });
       // $scope.apply();
       $scope.email=user.email;
 
@@ -493,7 +458,7 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
     // email is unique id
     user.id = firebase.auth().currentUser.email;
 
-    //TODO WTF	  
+    //TODO WTF
     user.id = user.id.replace(/[&\/\\#,+()$~%.'":*?<>{}@]/g, '');
     user.firstName = $scope.firstName;
     user.lastName = $scope.lastName;
@@ -506,7 +471,7 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
     // var button = FindViewById<ImageButton> (Resource.Id.myButton);
     $scope.listOfPeople[user.id] = user;
     $scope.addGuestToFirebase(user);
-    $ionicLoading.show({ template: 'Person has been added to firebase!', noBackdrop: true, duration: 1000 });
+    $ionicLoading.show({ template: 'Person has been added to firebase!', noBackdrop: true, duration: 2000 });
     $state.go("dash"); // go back to home page
   };
 
