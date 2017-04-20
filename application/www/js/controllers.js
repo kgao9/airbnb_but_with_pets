@@ -151,16 +151,10 @@ starter.controller('ChatsCtrl', function($scope, Chats, $state) {
 	  {
 		  message_obj = messages.val();
 
-		  console.log($scope.uid);
-		  console.log(message_obj);
-                  console.log(message_obj[$scope.uid]);
-
 		  user_msg_objs = message_obj[$scope.uid];
 
 		  for(var user_name in user_msg_objs)
 		  {
-			  //TODO
-			  //refactor given the fact that firebase hands out a key for a nest
 			  var chat_obj = {};
 
 			  console.log(user_msg_objs);
@@ -178,8 +172,6 @@ starter.controller('ChatsCtrl', function($scope, Chats, $state) {
 			  chat_obj.lastText = user_msg_obj.lastText;
 			  chat_obj.id = user_msg_obj.id;
 			  chats.push(chat_obj);
-
-			  console.log(chats);
 		  }
 
 	          $scope.chats = chats;
@@ -191,9 +183,6 @@ starter.controller('ChatsCtrl', function($scope, Chats, $state) {
 		  console.log("The read failed: " + errorObject.code);
 	  });
 
-  //console.log(chats);
-
-  //$scope.chats = Chats.all();
 });
 
 starter.controller('ChatDetailCtrl', function($scope, $stateParams) {
@@ -212,11 +201,10 @@ starter.controller('ChatDetailCtrl', function($scope, $stateParams) {
       var secondNest = {};
       secondNest[$stateParams.name] = nest;
 
-      var db_msg_obj = {};
-      db_msg_obj[$scope.uid] = secondNest;
-
+      //var db_msg_obj = {};
+      //db_msg_obj[$scope.uid] = secondNest;	  
       var ref = firebase.database().ref('/all_messages');
-      ref.push().set(db_msg_obj);
+      ref.child($scope.uid).set(secondNest);
       console.log("msg sent");
 
       //TODO
