@@ -7,8 +7,8 @@ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHi
   // when user logs out and reaches login page, clear all history
   $scope.$on('$ionicView.enter', function(ev) {
     if(ev.targetScope !== $scope){
-        $ionicHistory.clearHistory();
-        $ionicHistory.clearCache();
+      $ionicHistory.clearHistory();
+      $ionicHistory.clearCache();
     }
   });
 
@@ -85,19 +85,19 @@ starter.controller('DashCtrl', function($scope, $state, $stateParams) {
   $scope.attemptLogout = function() {
 
     firebase.auth().signOut().then(function() {
-        console.log("sign out user! ");
-        // $ionicLoading.show( {template: 'Logout Successful! ', noBackdrop: true, duration:1000 });
-        $state.go("login");
+      console.log("sign out user! ");
+      // $ionicLoading.show( {template: 'Logout Successful! ', noBackdrop: true, duration:1000 });
+      $state.go("login");
     },function(error){
-        console.error('Sign out Error: ' + error);
-        ionicLoading.show( {template: 'Logout Unsuccessful! ', noBackdrop: true, duration:1000 });
+      console.error('Sign out Error: ' + error);
+      ionicLoading.show( {template: 'Logout Unsuccessful! ', noBackdrop: true, duration:1000 });
     });
   };
 
 });
 
 
-starter.controller('ChatsCtrl', function($scope, Chats) {
+starter.controller('ChatsCtrl', function($scope, Chats, $state) {
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -107,12 +107,70 @@ starter.controller('ChatsCtrl', function($scope, Chats) {
   //});
 
   console.log("chats controller");
+  console.log($scope);
 
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
+  $scope.viewChat = function(chat) {
+    console.log(chat);
+    $state.go('chat-detail', chat);
   };
+
+  var ref = firebase.database().ref('/messages_for_table');
+  var chats = [];
+
+  $scope.email = firebase.auth().currentUser.email;
+
+  $scope.uid = $scope.email.replace(/[&\/\\#,+()$~%.'":*?<>{}@]/g, '');
+  $scope.uid = $scope.uid.replace("_", '');
+
+  ref.on("value", function(messages)
+    {
+      message_obj = messages.val();
+
+      console.log($scope.uid);
+      console.log(message_obj);
+      console.log(message_obj[$scope.uid]);
+
+      user_msg_objs = message_obj[$scope.uid];
+
+      for(var user_name in user_msg_objs)
+      {
+        //TODO
+        //refactor given the fact that firebase hands out a key for a nest
+        var chat_obj = {};
+
+        console.log(user_msg_objs);
+        console.log(user_name);
+        console.log(user_msg_objs[user_name]);
+
+        //not a property of object #skip
+        //if (!user_msg_objs[user_name].hasOwnProperty(user_name))
+        //  continue;
+
+        var user_msg_obj = user_msg_objs[user_name];
+
+        chat_obj.face = 'img/ben.png';
+        chat_obj.name = user_name;
+        chat_obj.lastText = user_msg_obj.lastText;
+        chat_obj.id = user_msg_obj.id;
+        chats.push(chat_obj);
+
+        console.log(chats);
+      }
+
+      $scope.chats = chats;
+
+    },
+
+    function (errorObject)
+    {
+      console.log("The read failed: " + errorObject.code);
+    });
+
+  //console.log(chats);
+
+  //$scope.chats = Chats.all();
 });
+
 
 starter.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
   $scope.chat = Chats.get($stateParams.chatId);
@@ -127,20 +185,20 @@ starter.controller('BlogCtrl', function($scope, $state) {
   };
 
   $scope.newPost = function() {
-      $state.go('newPost');
+    $state.go('newPost');
   };
 });
 
 starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $state){
-   $scope.id ="";
-   $scope.purpose = "";
-   $scope.typePet = "";
-   $scope.city = "";
-   $scope.state = "";
-   $scope.startDate = "";
-   $scope.endDate = "";
-   $scope.message = "";
-   $scope.active = "";
+  $scope.id ="";
+  $scope.purpose = "here is nothing";
+  $scope.typePet = "here is nothing";
+  $scope.city = "";
+  $scope.state = "";
+  $scope.startDate = "";
+  $scope.endDate = "";
+  $scope.message = "";
+  $scope.active = "";
   $scope.listPets = [
     {text: 'Dogs'},
     {text: 'Cats'},
@@ -163,7 +221,6 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
   $scope.listOfPost = {};
   //post database
   $scope.addPostToFirebase = function(post) {
-
     firebase.database().ref('/posts').push().set({
       id: post.id,
       purpose: post.purpose,
@@ -185,7 +242,9 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
     post.id = firebase.auth().currentUser.email;
     // firebase.database().ref().child('posts').push().key;
     console.log(post.id);
-    post.purpose =$scope.selectUsers;
+    post.purpose="nothing";
+    post.purpose = $scope.selectUsers;
+    post.typeset={Cats:false,Dogs: false};
     post.typePet= $scope.selectPets;
     post.city = $scope.city;
     post.state = $scope.state;
@@ -196,10 +255,19 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
     //active
     post.active =  document.getElementById("active").checked;
     $scope.listOfPost[post.id] = post;
-    $scope.addPostToFirebase(post);
-    $ionicLoading.show({ template: 'Post has been added to firebase!', noBackdrop: true, duration: 1000 });
-    //$state.go("dash"); // go back to home page
-
+    //||post.endDate==null
+    console.log(post.purpose.Sitter)
+  //  console.log(post.typePet)
+    if((post.purpose.Sitter==false && post.purpose.Owner==false)||(post.typePet.Dogs==false&&post.typePet.Cats==false&&post.typePet.Fish==false)||post.city==""||post.state==""||post.active==""){
+      $ionicLoading.show({ template: 'Post cannot be added to firebase! Please fill in all information', noBackdrop: true, duration: 1000 });
+      post="";
+      console.log(post);
+    }
+    else {
+      $scope.addPostToFirebase(post);
+      $ionicLoading.show({template: 'Post has been added to firebase!', noBackdrop: true, duration: 1000});
+      //$state.go("dash"); // go back to home page
+    }
   };
   $scope.getLocation = function () {
     $state.go("gps");
@@ -210,7 +278,9 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
   };
 
 });
-starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $state) {
+
+
+starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $state, $stateParams) {
   var myUserId = firebase.auth().currentUser.email;
   console.log(myUserId);
   // Find all dinosaurs whose height is exactly 25 meters.
@@ -226,52 +296,109 @@ starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $st
   ];
   $scope.selectUsers = {};
   $scope.selectPets = {};
+
   $scope.showUsers=function(){
+    // var userString = JSON.stringify($scope.selectUsers)
+    // console.log(userString);
+    // var userIdentity = JSON.parse(userString)
+    $stateParams.userIdentity = $scope.selectUsers;
     console.log($scope.selectUsers);
+    // console.log($scope.selectUsers.text);
   };
+
   $scope.showPets=function(){
     console.log($scope.selectPets);
+    // var petString = JSON.stringify($scope.selectPets);
+    $stateParams.pet = $scope.selectPets;
   };
+
   $scope.Search=function () {
-    //if active equals to true
-    var ref = firebase.database().ref("posts");
-    console.log(ref);
-    var ref = firebase.database().ref("/posts");
-    ref.orderByChild("active").equalTo("true").on("child_added", function(snapshot) {
-      console.log(snapshot.key);
+    // pass to search result page
+    $state.go('searchResult', {
+      'city' : $scope.city,
+
+      'state' : $scope.state,
+
+      'userIdentity' : $stateParams.userIdentity,
+
+      'pet' : $stateParams.pet
     });
-
-    ref.orderByChild("id").equalTo("kitten@petbnb.com").on("child_added", function(snapshot) {
-      var allSelected = snapshot.key;
-    });
-    console.log(allSelected);
-    //Search State
-    var userState = $scope.state;
-      allSelected.orderByChild("state").equalTo(userState).on("child_added", function(snapshot) {
-        var stateSelected = snapshot.key;
-      });
-    console.log(stateSelected);
-    //Search City
-    var userCity = $scope.city;
-    stateSelected.orderByChild("city").equalTo(userCity).on("child_added", function(snapshot) {
-      var citySelected = snapshot.key;
-    });
-    console.log(citySelected);
-    //Search Type
-    var userType = $scope.purpose;
-    citySelected.orderByChild("purpose").equalTo(userType).on("child_added", function(snapshot) {
-      var finalSelected = snapshot.key;
-    });
-    console.log(finalSelected);
-  }
-
-
-
-
-
+  };
 
 
 });
+
+
+starter.controller('SearchResultCtrl', function($scope, $stateParams, $state) {
+  console.log("**** Search Result Ctrl *****");
+
+  var selectedPosts = [];
+  var post = {};
+  var numPosts = 0;
+
+  var ref = firebase.database().ref("posts");
+  ref.orderByKey().on("value", function(snapshot) {
+    console.log(snapshot.key);
+    // iterate through all posts
+    snapshot.forEach(function(data) {
+      // city and state cannot be empty
+      if ($stateParams.city == data.val().city && $stateParams.state == data.val().state) {
+        var post = {};
+        post.id = data.val().id;
+        post.city = data.val().city;
+        post.state = data.val().state;
+        post.startDate = data.val().startDate;
+        post.endDate = data.val().endDate;
+        post.message = data.val().message;
+
+        selectedPosts[numPosts] = post;
+        numPosts ++;
+      }
+    });
+
+  }, function (errorObject) {
+    console.log("The read failed: " + errorObject.code);
+  });
+
+
+  //console.log('first selected: ' + selectedPosts[0]);
+  if (selectedPosts.length == 0) {
+    $scope.foundNothing = true;
+  } else {
+    $scope.foundNothing = false;
+  }
+
+  // a function to determine if two
+  function isEquivalent(a, b) {
+    // Create arrays of property names
+    if (a==null || b==null) return false;
+
+    var aProps = Object.getOwnPropertyNames(a);
+    var bProps = Object.getOwnPropertyNames(b);
+
+    if (aProps.length != bProps.length) {
+      return false;
+    }
+
+    for (var i = 0; i < aProps.length; i++) {
+      var propName = aProps[i];
+
+      if (a[propName] !== b[propName]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+
+  // assign to frontend
+  $scope.posts = selectedPosts;
+
+});
+
+
+
 starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $state) {
   $scope.firstName = "Puppy";
   $scope.lastName = "Dog";
@@ -286,7 +413,7 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
 
 //Constructing the database
   $scope.addGuestToFirebase = function(user) {
-      firebase.database().ref('/guests').push().set({
+    firebase.database().ref('/guests').push().set({
       id: user.id,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -353,4 +480,3 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
   };
 
 });
-
