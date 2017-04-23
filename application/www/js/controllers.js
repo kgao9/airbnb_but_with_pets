@@ -1,61 +1,69 @@
 var starter = angular.module('starter.controllers', []);
 
-starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHistory, $rootScope) {
-  $scope.email = "kitten@petbnb.com";
-  $scope.password = "123456";
+starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHistory, $rootScope) 
+{
+    $scope.email = "";//"kitten@petbnb.com";
+    $scope.password = "";//"123456";
 
-  // when user logs out and reaches login page, clear all history
-  $scope.$on('$ionicView.enter', function(ev) {
-    if(ev.targetScope !== $scope){
-        $ionicHistory.clearHistory();
-        $ionicHistory.clearCache();
-    }
-  });
+    // when user logs out and reaches login page, clear all history
+    //TODO - should probably clear rootScope too
+    $scope.$on('$ionicView.enter', function(ev) {
+        if(ev.targetScope !== $scope)
+        {
+            $ionicHistory.clearHistory();
+            $ionicHistory.clearCache();
+        }
+    });
 
 
   // TODO: signin function - done
   $scope.createUser = function(email, password) {
-    return firebase.auth().createUserWithEmailAndPassword(email,password).then(function(){
-      $ionicLoading.show({template:'Created New User!',noBackdrop:true,duration:2000});
-    }).catch(function(error){
-      var errorCode=error.code;
-      var errorMessage=error.message;
-      $ionicLoading.show({template:'Fail to Create New User! Try again!',noBackdrop:true,duration:2000});
-    });
+      return firebase.auth().createUserWithEmailAndPassword(email,password).then(function(){
+          $ionicLoading.show({template:'Created New User!',noBackdrop:true,duration:2000});
+      }).catch(function(error){
+          var errorCode=error.code;
+          var errorMessage=error.message;
+          $ionicLoading.show({template:'Fail to Create New User! Try again!',noBackdrop:true,duration:2000});
+      });
   };
 
-  // TODO: login function - not yet
+  // TODO: login function - done
   $scope.login = function(email, password) {
-    return firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-    });
+      return firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+      });
   };
 
   $scope.attemptCreateUser = function(){
-    //$scope.createUser($scope.email,$scope.password);
     $state.go("signup");
   };
+
   // TODO: attempt login
   $scope.attemptLogin = function(){
-    console.log("Attempting Login with Email:"+$scope.email+"|password:"+$scope.password);
-
     $scope.login($scope.email,$scope.password).then(function(){
       //Check if current User is set(we were succesfully able to login)
-      var current_user = firebase.auth().currentUser;
+      $rootScope.current_user = firebase.auth().currentUser;
 
       if(!current_user){
         //Show modal with description of events
-        $ionicLoading.show({template:'Fail to Login! Check credentials,check connection or Create user',noBackdrop:true, duration:2000});
-        // TODO: unsuccessful login
+        $ionicLoading.show({template:'Fail to Login! Check credentials,check connection or Create a new user',noBackdrop:true, duration:2000});
+
       } else{
         //If successful login,then current User is set and display event modal
         //Show modal with description of events
         $ionicLoading.show({template:'Successfully Login with Existing User!',noBackdrop:true,duration:2000});
-        // TODO: successful login
+	var ref = firebase.database().ref('/guests');
+	
+	ref.on("value", function(user_obj){                   
+		    SrootScope.userInfo = user_obj.val();
+	        }).catch(function(error) {$rootScope.userInfo = {} });
+
+	ref = firebase.database.ref('/');      
+
+        
+
         $state.go("dash");
-        // $scope.logoutButton.username=firebase.auth().currentUser.email;
-        // $scope.logoutButton.visibility='visible';
       }
     });
   };
@@ -73,15 +81,34 @@ starter.controller('SignupCtrl', function($scope, $ionicLoading, $state, $ionicH
   $scope.photo="";
 
   $scope.signup = function() {
-    return firebase.auth().createUserWithEmailAndPassword($scope.email,$scope.password).then(function(){
+    return firebase.auth().createUserWithEmailAndPassword($scope.email,$scope.password).then(function(err){
       $ionicLoading.show({template:'Created New User!',noBackdrop:true,duration:2000});
-      $state.go("login");
+
+      var current_user = firebase.auth().currentUser;
+
+      $rootScope.current_user = current_user;
+      $rootscope.posts = [];
+      $rootScope.messageTable = [];	    
+
+      userObj = {};
+      userObj.firstName = $scope.firstName;
+      userObj.lastName = $scope.lastName;
+      userObj.location = $scope.location;
+      userObj.pets = $scope.pets;
+      userObj.phone = $scope.phone;
+
+      $rootScope.userInfo = userObj;	    
+
+      var ref = firebase.database().ref('/guests');
+      ref.child(current_user.uid).set(userObj);
+      //push userObj	    
+
+      $state.go("dash");
     }).catch(function(error){
       var errorCode=error.code;
       var errorMessage=error.message;
       console.log(errorMessage);
       $ionicLoading.show({template:'Fail to Create New User! Try again!',noBackdrop:true,duration:2000});
-      $state.go("login");
     });
   }
 });
@@ -322,6 +349,30 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
 starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $state) {
   var myUserId = firebase.auth().currentUser.email;
   console.log(myUserId);
+
+  //functions to implement:
+  // function findPosts:
+  // input list of posts
+  // input postObj with user input 
+  // logic:
+	// for each post in post,
+		// if post matches all of user input
+	        // push post to returnlist
+	// return return list
+	// how do we know if a post matches user input
+	// if user input isn't "" and it has the same value
+	// That way, users aren't forced to enter in everything
+
+  //so what does user input look like?
+	//Looks like
+	//{
+	//    list of valid pets
+	//    city
+	//    location
+	//    owner type
+	//}	
+
+  //huh? WTH?	
   // Find all dinosaurs whose height is exactly 25 meters.
 
   $scope.listPets = [
