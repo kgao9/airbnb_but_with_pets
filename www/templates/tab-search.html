@@ -2,19 +2,19 @@
 
   <ion-content>
     <!-- Cher's added-->
-    <div class="list">
 
-      <div class="item item-divider">
-        User Type
-          <ion-checkBox ng-model="owner">I'm Looking For Pet Owners</ion-checkBox>
-          <ion-checkBox ng-model="sitter">I'm Looking For Pet Sitters</ion-checkBox>
+      <div class="list" style="float: left; width: 100%;">
+        <ion-checkbox ng-init="selectPets[item.text]=false" ng-repeat="item in listPets" ng-model="selectPets[item.text]" ng-change="showPets()">
+          {{ item.text }}
+        </ion-checkbox>
       </div>
 
-      <div class="item item-divider">
-        Pet Type
-        <ion-checkBox ng-model="cats">I'm Looking For Cats</ion-checkBox>
-        <ion-checkBox ng-model="dogs">I'm Looking For Dogs</ion-checkBox>
+      <div class="list" style="float: left; width: 100%;">
+        <ion-checkbox ng-init="selectUsers[item.text]=false" ng-repeat="item in listUsers" ng-model="selectUsers[item.text]" ng-change="showUsers()">
+          {{ item.text }}
+        </ion-checkbox>
       </div>
+
 
       <div class="item item-divider">
         Location
@@ -30,15 +30,10 @@
     </div>
 
     <button class="button button-full" ng-click="Search()">Let's find out!</button>
+    <button class="button button-full" ng-click="backHome()">Home</button>
 
 
-    <div class="">
-      <li class="button button-full" ng-repeat="user in users" ng-click="selectUser()">
-        Name: {{ user.firstName }} {{ user.lastName }}
-        Pet: {{ user.petType }}
-        Owner/Sitter: {{ user.userType }}
-      </li>
-    </div>
+
   </ion-content>
 
 

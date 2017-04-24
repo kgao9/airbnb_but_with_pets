@@ -1,6 +1,7 @@
 // Ionic Starter App
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
@@ -124,6 +125,8 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
 });
 =======
+=======
+>>>>>>> f5c989789da70c4081c34ed64f9cfa7fc5f976a2
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
 
@@ -188,30 +191,11 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl:'templates/tab-login.html',
 
-        controller:'LoginCtrl'
+        controller:'LoginCtrl',
+
+        params: { 'user' : null }
 
       })
-
-
-      //
-
-      //    .state('login', {
-
-      //      url: '/login',
-
-      //      views: {
-
-      //        'tab-login': {
-
-      //          templateUrl: 'templates/tab-login.html',
-
-      //          controller: 'LoginCtrl'
-
-      //        }
-
-      //      }
-
-      //    })
 
 
       // setup an abstract state for the tabs directive
@@ -222,7 +206,7 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         abstract: true,
 
-        templateUrl: 'templates/tabs.html'
+        templateUrl: 'templates/tabs.html',
 
       })
 
@@ -231,134 +215,107 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
 
 
-      .state('tab.dash', {
+      .state('dash', {
 
         url: '/dash',
 
-        views: {
+        templateUrl: 'templates/tab-dash.html',
 
-          'tab-dash': {
+        controller: 'DashCtrl',
 
-            templateUrl: 'templates/tab-dash.html',
-
-            controller: 'DashCtrl'
-
-          }
-
-        }
+        params: { 'user' : null }
 
       })
 
 
 
-      .state('tab.signup', {
+      .state('signup', {
 
         url: '/signup',
 
-        views: {
+        templateUrl: 'templates/tab-signup.html',
 
-          'tab-signup': {
+        controller: 'SignupCtrl'
 
-            templateUrl: 'templates/tab-signup.html',
-
-            controller: 'SignupCtrl'
-
-          }
-
-        }
 
       })
 
 
-      .state('tab.chats', {
+      .state('chats', {
 
         url: '/chats',
 
-        views: {
+        templateUrl: 'templates/tab-chats.html',
 
-          'tab-chats': {
+        controller: 'ChatsCtrl',
 
-            templateUrl: 'templates/tab-chats.html',
 
-            controller: 'ChatsCtrl'
-
-          }
-
-        }
 
       })
 
-      .state('tab.chat-detail', {
+      .state('chat-detail', {
 
-        url: '/chats/:chatId',
+        url: '/chats/:name',
 
-        views: {
+        templateUrl: 'templates/chat-detail.html',
 
-          'tab-chats': {
-
-            templateUrl: 'templates/chat-detail.html',
-
-            controller: 'ChatDetailCtrl'
-
-          }
-
-        }
+        controller: 'ChatDetailCtrl',
+	
+	params: {face: '', id: -1, lastText: '', name: ''}      
 
       })
 
 
-      .state('tab.account', {
+      .state('account', {
 
         url: '/account',
 
-        views: {
+        templateUrl: 'templates/tab-account.html',
 
-          'tab-account': {
+        controller: 'AccountCtrl',
 
-            templateUrl: 'templates/tab-account.html',
-
-            controller: 'AccountCtrl'
-
-          }
-
-        }
+        params: { 'user' : null }
 
       })
 
-      .state('tab.search', {
+      .state('search', {
 
         url: '/search',
 
-        views: {
+        templateUrl: 'templates/tab-search.html',
 
-          'tab-search': {
-
-            templateUrl: 'templates/tab-search.html',
-
-            controller: 'SearchCtrl'
-
-          }
-
-        }
+        controller: 'SearchCtrl'
 
       })
 
 
-      .state('tab.blog', {
+      .state('blog', {
 
         url: '/blog',
 
-        views: {
+        templateUrl: 'templates/tab-blog.html',
 
-          'tab-blog': {
+        controller: 'BlogCtrl',
 
-            templateUrl: 'templates/tab-blog.html',
 
-            controller: 'BlogCtrl'
+      })
+      .state('gps', {
 
-          }
+        url: '/gps',
 
-        }
+        templateUrl: 'templates/blog-gps.html',
+
+     //   controller: 'gpsCtrl'
+
+      })
+
+      .state('newPost', {
+
+        url: '/newPost',
+
+        templateUrl: 'templates/blog-newpost.html',
+
+        controller: 'NewPostCtrl'
 
       });
 
@@ -370,4 +327,7 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
   });
 
+<<<<<<< HEAD
 >>>>>>> 115fe4612f3015184b923ffbc7963eb0c651e245
+=======
+>>>>>>> f5c989789da70c4081c34ed64f9cfa7fc5f976a2

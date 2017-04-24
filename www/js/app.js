@@ -128,11 +128,11 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
       .state('chat-detail', {
 
-        url: '/chats/:chatId',
+        url: '/chats/:name',
 
         templateUrl: 'templates/chat-detail.html',
 
-        controller: 'ChatDetailCtrl'
+        controller: 'ChatDetailCtrl',
 
       })
 
@@ -155,7 +155,41 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl: 'templates/tab-search.html',
 
-        controller: 'SearchCtrl'
+        controller: 'SearchCtrl',
+
+        params: {
+
+          'city' : "",
+
+          'state' : "",
+
+          'userIdentity' : { 'Sitter' : false,  'Owner': false },
+
+          'pet' : { 'Dogs' : false,  'Cats': false, 'Fish': false}
+
+        }
+
+      })
+
+      .state('searchResult', {
+
+        url: '/searchResult',
+
+        templateUrl: 'templates/search-result.html',
+
+        controller: 'SearchResultCtrl',
+
+        params: {
+
+          'city' : "",
+
+          'state' : "",
+
+          'userIdentity' : { 'Sitter' : false,  'Owner': false },
+
+          'pet' : { 'Dogs' : false,  'Cats': false, 'Fish': false}
+
+        }
 
       })
 
@@ -166,11 +200,19 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl: 'templates/tab-blog.html',
 
-        controller: 'BlogCtrl',
-
+        controller: 'BlogCtrl'
 
       })
 
+      .state('gps', {
+
+        url: '/gps',
+
+        templateUrl: 'templates/blog-gps.html',
+
+        //   controller: 'gpsCtrl'
+
+      })
 
       .state('newPost', {
 
@@ -189,4 +231,3 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
 
   });
-

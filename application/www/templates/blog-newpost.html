@@ -4,13 +4,13 @@
 
 
       <div class="list" style="float: left; width: 100%;">
-        <ion-checkbox  ng-init="selectPets[item.text]=false" ng-repeat="item in listPets" ng-model="selectPets[item.text]" ng-change="showPets()">
+        <ion-checkbox ng-repeat="item in listPets" ng-model="selectPets[item.text]" ng-change="showPets()">
           {{ item.text }}
         </ion-checkbox>
       </div>
 
       <div class="list" style="float: left; width: 100%;">
-        <ion-checkbox  ng-init="selectUsers[item.text]=false" ng-repeat="item in listUsers" ng-model="selectUsers[item.text]" ng-change="showUsers()">
+        <ion-checkbox ng-repeat="item in listUsers" ng-model="selectUsers[item.text]" ng-change="showUsers()">
           {{ item.text }}
         </ion-checkbox>
       </div>
