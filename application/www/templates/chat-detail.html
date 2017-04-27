@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!--
   This template loads for the 'tab.friend-detail' state (app.js)
   'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
@@ -10,5 +11,26 @@
     <p>
       {{chat.lastText}}
     </p>
+=======
+<ion-view view-title="Messages with {{name}}">
+  <ion-content>
+    <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="(timestamp, message) in chats" type="item-text-wrap">
+        <p>To: {{message.To}}</p>
+        <p>From: {{message.From}}</p>
+	<p>{{message.Msg}}</p>
+	<!-- will need someone to implement because I have no idea how to do this -->
+	<!--<p>Sent at: {{timestamp}}</p>-->
+        <i class="icon ion-chevron-right icon-accessory"></i>
+
+	<ion-option-button class="button-assertive"  ng-click="viewChat(chat)">
+		delete
+        </ion-option-button>
+      </ion-item>
+      <input type="text" id="msg" value="Enter your Msg here"><br>
+      <button ion-button ng-click=sendMsg()>Send</button>
+      </ion-option-button>	       
+    </ion-list>
+>>>>>>> 56b3a6bb1f89e832c42ace49e7199225b142b757
   </ion-content>
 </ion-view>

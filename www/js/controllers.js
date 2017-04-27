@@ -317,6 +317,14 @@ starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $st
     });
   };
 
+<<<<<<< HEAD
+=======
+  $scope.backHome = function() {
+    $state.go('dash');
+  }
+
+
+>>>>>>> 56b3a6bb1f89e832c42ace49e7199225b142b757
 });
 
 
