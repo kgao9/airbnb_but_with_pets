@@ -1,0 +1,40 @@
+<ion-view view-title="Search">
+
+  <ion-content>
+    <!-- Cher's added-->
+
+      <div class="list" style="float: left; width: 100%;">
+        <ion-checkbox ng-init="selectPets[item.text]=false" ng-repeat="item in listPets" ng-model="selectPets[item.text]" ng-change="showPets()">
+          {{ item.text }}
+        </ion-checkbox>
+      </div>
+
+      <div class="list" style="float: left; width: 100%;">
+        <ion-checkbox ng-init="selectUsers[item.text]=false" ng-repeat="item in listUsers" ng-model="selectUsers[item.text]" ng-change="showUsers()">
+          {{ item.text }}
+        </ion-checkbox>
+      </div>
+
+
+      <div class="item item-divider">
+        Location
+        <ion-label>
+        <input type="text" name="city" id="city-textarea"
+               ng-model="$parent.city" placeholder="Your City">
+        </ion-label>
+        <ion-label>
+        <input type="text" name="state" id="state-textarea"
+               ng-model="$parent.state" placeholder="Your State">
+        </ion-label>
+      </div>
+    </div>
+
+    <button class="button button-full" ng-click="Search()">Let's find out!</button>
+    <button class="button button-full" ng-click="backHome()">Home</button>
+
+
+
+  </ion-content>
+
+
+</ion-view>

@@ -1,0 +1,28 @@
+<ion-view view-title="Home!">
+  <ion-content class="padding">
+    <!-- TODO: make personal profile-->
+    <div class="list card" align="center">
+        <canvas class="header" width="200" height="70" id="header-blur"></canvas>
+        <div class="profile-picture big-profile-picture" align="center">
+          <img style="round" src=http://tva4.sinaimg.cn/crop.0.0.639.639.180/905accf5jw8f37pd22o8dj20hs0hrq3q.jpg>
+        </div>
+        <h2 class="profile-name dark"> {{user.firstName}} {{user.lastName}}</h2>
+        <div class="profile-info">{{user.description}}</div>
+      </ion-item>
+
+      <!-- Three Buttons-->
+      <ion-item style="float: middle; width: 100%">
+        <button class="button button-large button-positive" ng-click="toSearchState()">Search</button>
+        <button class="button button-large button-positive" ng-click="toBlogState()">Blog</button>
+        <button class="button button-large button-positive" ng-click="toChatRoomState()">Chatroom</button>
+        <button class="button button-large button-positive" ng-click="toAccountState()">Account Info</button>
+      </ion-item>
+        <ion-item>
+            <button class="button button-large button-dark" ng-click="attemptLogout()">Logout</button>
+        </ion-item>
+
+    </div>
+
+
+  </ion-content>
+</ion-view>
