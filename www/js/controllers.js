@@ -189,7 +189,7 @@ starter.controller('BlogCtrl', function($scope, $state) {
   };
 });
 
-starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $state){
+starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $state,$stateParams){
   $scope.id ="";
   $scope.purpose = "here is nothing";
   $scope.typePet = "here is nothing";
@@ -211,10 +211,10 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
   $scope.selectUsers = {};
   $scope.selectPets = {};
   $scope.showUsers=function(){
-    console.log($scope.selectUsers);
+   console.log($stateParams.selectUsers);
   };
   $scope.showPets=function(){
-    console.log($scope.selectPets);
+    console.log($stateParams.selectPets);
   };
 
 
@@ -256,12 +256,12 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
     post.active =  document.getElementById("active").checked;
     $scope.listOfPost[post.id] = post;
     //||post.endDate==null
-    console.log(post.purpose.Sitter)
+   // console.log(post.purpose.Sitter)
   //  console.log(post.typePet)
     if((post.purpose.Sitter==false && post.purpose.Owner==false)||(post.typePet.Dogs==false&&post.typePet.Cats==false&&post.typePet.Fish==false)||post.city==""||post.state==""||post.active==""){
       $ionicLoading.show({ template: 'Post cannot be added to firebase! Please fill in all information', noBackdrop: true, duration: 1000 });
       post="";
-      console.log(post);
+    //  console.log(post);
     }
     else {
       $scope.addPostToFirebase(post);
@@ -296,18 +296,17 @@ starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $st
   ];
   $scope.selectUsers = {};
   $scope.selectPets = {};
-
   $scope.showUsers=function(){
     // var userString = JSON.stringify($scope.selectUsers)
     // console.log(userString);
     // var userIdentity = JSON.parse(userString)
     $stateParams.userIdentity = $scope.selectUsers;
-    console.log($scope.selectUsers);
+ //   console.log($scope.selectUsers);
     // console.log($scope.selectUsers.text);
   };
 
   $scope.showPets=function(){
-    console.log($scope.selectPets);
+   // console.log($scope.selectPets);
     // var petString = JSON.stringify($scope.selectPets);
     $stateParams.pet = $scope.selectPets;
   };
@@ -319,9 +318,9 @@ starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $st
 
       'state' : $scope.state,
 
-      'userIdentity' : $stateParams.userIdentity,
+     'userIdentity' : $stateParams.userIdentity,
 
-      'pet' : $stateParams.pet
+       'pet' : $stateParams.pet
     });
   };
 
@@ -337,12 +336,13 @@ starter.controller('SearchResultCtrl', function($scope, $stateParams, $state) {
   var numPosts = 0;
 
   var ref = firebase.database().ref("posts");
-  ref.orderByKey().on("value", function(snapshot) {
+  ref.orderByChild("endDate").limitToFirst(10).on("value", function(snapshot) {
     console.log(snapshot.key);
     // iterate through all posts
-    snapshot.forEach(function(data) {
+    snapshot.forEach(function (data) {
       // city and state cannot be empty
-      if ($stateParams.city == data.val().city && $stateParams.state == data.val().state) {
+      if (data.val().active == true && lowercaseEqual($stateParams.city, data.val().city)
+        || lowercaseEqual($stateParams.state, data.val().state)) {
         var post = {};
         post.id = data.val().id;
         post.city = data.val().city;
@@ -350,11 +350,50 @@ starter.controller('SearchResultCtrl', function($scope, $stateParams, $state) {
         post.startDate = data.val().startDate;
         post.endDate = data.val().endDate;
         post.message = data.val().message;
-
+        post.purpose = data.val().purpose;
+        post.typePet = data.val().typePet;
         selectedPosts[numPosts] = post;
-        numPosts ++;
+        numPosts++;
       }
-    });
+    })
+    if ($stateParams.userIdentity == null && $stateParams.pet == null) {
+      //do nothing
+    } else if ($stateParams.userIdentity == null && $stateParams.pet != null) {
+      for (post in selectedPosts) {
+        var singlePost = selectedPosts[post];
+        //console.log(singlePost.purpose);
+        //console.log(singlePost.typePet);
+        if (!isEquivalent(singlePost.typePet, $stateParams.pet)) {
+          //console.log("yes");
+          selectedPosts.splice(post);
+        }
+      }
+    } else if ($stateParams.userIdentity != null && $stateParams.pet == null) {
+      for (post in selectedPosts) {
+        var singlePost = selectedPosts[post];
+        //console.log(singlePost.purpose);
+        //console.log(singlePost.typePet);
+        if (!isEquivalent(singlePost.purpose, $stateParams.userIdentity)) {
+          //console.log("yes");
+          selectedPosts.splice(post);
+        }
+      }
+    } else {
+      console.log($stateParams.userIdentity);
+      //  console.log($stateParams.pet);
+      // remove all unrelated posts with pets type;
+      for (post in selectedPosts) {
+        var singlePost = selectedPosts[post];
+        console.log(singlePost.purpose);
+        //console.log(singlePost.typePet);
+        if (!isEquivalent(singlePost.purpose, $stateParams.userIdentity) || !isEquivalent(singlePost.typePet, $stateParams.pet)) {
+          //console.log("yes");
+          selectedPosts.splice(post);
+        }
+      }
+    }
+    console.log(selectedPosts);
+    // remove all unrelated posts with owner type
 
   }, function (errorObject) {
     console.log("The read failed: " + errorObject.code);
@@ -368,6 +407,13 @@ starter.controller('SearchResultCtrl', function($scope, $stateParams, $state) {
     $scope.foundNothing = false;
   }
 
+  function lowercaseEqual(a, b) {
+    if(a==null || b==null) return false;
+    if(a.toLowerCase() == b.toLowerCase()) return true;
+    else return false;
+  }
+
+
   // a function to determine if two
   function isEquivalent(a, b) {
     // Create arrays of property names
@@ -376,9 +422,10 @@ starter.controller('SearchResultCtrl', function($scope, $stateParams, $state) {
     var aProps = Object.getOwnPropertyNames(a);
     var bProps = Object.getOwnPropertyNames(b);
 
-    if (aProps.length != bProps.length) {
-      return false;
-    }
+     if (aProps.length != bProps.length) {
+       return false;
+     }
+
 
     for (var i = 0; i < aProps.length; i++) {
       var propName = aProps[i];
@@ -389,6 +436,7 @@ starter.controller('SearchResultCtrl', function($scope, $stateParams, $state) {
     }
 
     return true;
+
   }
 
 
