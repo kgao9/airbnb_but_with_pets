@@ -2,6 +2,18 @@ var starter = angular.module('starter.controllers', []);
 
 starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHistory, $rootScope) 
 {
+     //so, why here?
+     //that way, we don't have to access db in sign up, posts, or search
+     //so why not here?
+     //subtle race condition with search
+     //if user adds posts in posts, and some other user are in search
+     //they won't see that post unless they relogin
+     //We're going to ignore that because we want faster performance	
+     ref = firebase.database().ref('/posts');          
+     ref.on("value", function(all_posts){                 
+	     $rootScope.posts = all_posts.val();         
+     }, (function(error) {$rootScope.all_posts; }));
+
     $scope.email = "";//"kitten@petbnb.com";
     $scope.password = "";//"123456";
 
@@ -12,6 +24,8 @@ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHi
         {
             $ionicHistory.clearHistory();
             $ionicHistory.clearCache();
+            $rootScope.current_user = {};
+            $rootScope.userInfo = {}; 
         }
     });
 
@@ -27,7 +41,9 @@ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHi
       });
   };
 
-  // TODO: login function - done
+  //There's login and attempt Login
+  //which do I use? Makes no sense
+  // one of these need to go - probably this one  	
   $scope.login = function(email, password) {
       return firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
           var errorCode = error.code;
@@ -35,34 +51,40 @@ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHi
       });
   };
 
+  //when signup button is pressed, we go to this function
+  //route user to the sign up page	 
   $scope.attemptCreateUser = function(){
     $state.go("signup");
   };
 
-  // TODO: attempt login
+  //user attempts to login
+  //if successful, we store user and its info in rootScope
+  //if not, we display a fail to login message
   $scope.attemptLogin = function(){
     $scope.login($scope.email,$scope.password).then(function(){
       //Check if current User is set(we were succesfully able to login)
       $rootScope.current_user = firebase.auth().currentUser;
 
-      if(!current_user){
+      if(!$rootScope.current_user){
         //Show modal with description of events
+	//line is too long, hard to read
+	//80 char long standard
+	//Message is weird - no other site does this - failed to login should appear under login button instead 
         $ionicLoading.show({template:'Fail to Login! Check credentials,check connection or Create a new user',noBackdrop:true, duration:2000});
 
       } else{
         //If successful login,then current User is set and display event modal
         //Show modal with description of events
-        $ionicLoading.show({template:'Successfully Login with Existing User!',noBackdrop:true,duration:2000});
-	var ref = firebase.database().ref('/guests');
+	//Why? user can tell when it goes to the dashboard
+	//No other site does this
+        //$ionicLoading.show({template:'Successfully Login with Existing User!',noBackdrop:true,duration:2000});
+	var ref = firebase.database().ref('/guests/' + $rootScope.current_user.uid);
 	
 	ref.on("value", function(user_obj){                   
-		    SrootScope.userInfo = user_obj.val();
-	        }).catch(function(error) {$rootScope.userInfo = {} });
+		    $rootScope.userInfo = user_obj.val();
+	        }, (function(error) {$rootScope.userInfo = {}; }));
 
-	ref = firebase.database.ref('/');      
-
-        
-
+	//go to dash board
         $state.go("dash");
       }
     });
@@ -82,21 +104,27 @@ starter.controller('SignupCtrl', function($scope, $ionicLoading, $state, $ionicH
 
   $scope.signup = function() {
     return firebase.auth().createUserWithEmailAndPassword($scope.email,$scope.password).then(function(err){
-      $ionicLoading.show({template:'Created New User!',noBackdrop:true,duration:2000});
+      //No website does this either!!!	    
+      $ionicLoading.show({template:'Created New User! Logging in',noBackdrop:true,duration:2000});
 
       var current_user = firebase.auth().currentUser;
 
+      //we want to store all their posts and messages	    
       $rootScope.current_user = current_user;
-      $rootscope.posts = [];
-      $rootScope.messageTable = [];	    
 
+      //We want the user to have access to their firstName, lastName, location
+      // their pets and their phone
+      // We also want them to have a list of posts they made and the messages they sent 	     
       userObj = {};
       userObj.firstName = $scope.firstName;
       userObj.lastName = $scope.lastName;
       userObj.location = $scope.location;
       userObj.pets = $scope.pets;
       userObj.phone = $scope.phone;
+      userObj.posts = [];
+      userObj.messages = [];	    
 
+      //we stash this in rootScope	    
       $rootScope.userInfo = userObj;	    
 
       var ref = firebase.database().ref('/guests');
@@ -108,16 +136,18 @@ starter.controller('SignupCtrl', function($scope, $ionicLoading, $state, $ionicH
       var errorCode=error.code;
       var errorMessage=error.message;
       console.log(errorMessage);
+
+      //which website has this?	    
       $ionicLoading.show({template:'Fail to Create New User! Try again!',noBackdrop:true,duration:2000});
     });
   }
 });
 
-starter.controller('DashCtrl', function($scope, $state, $stateParams) {
-  console.log("in dash ctrl\n");
-  if ($stateParams.user == null ) console.log("user email info is null")
-  else console.log("user email" + user.email);
+starter.controller('DashCtrl', function($scope, $state, $rootScope) {
+  //what is this? user is always null and why do you need stateParams? What the hell?	
 
+  //you don't even do anything with the current user or state params?!?!?
+  //Why is it being passed in?	
   $scope.toAccountState = function () {
     $state.go("account");
   };
@@ -137,7 +167,7 @@ starter.controller('DashCtrl', function($scope, $state, $stateParams) {
   $scope.attemptLogout = function() {
 
     firebase.auth().signOut().then(function() {
-        console.log("sign out user! ");
+        //console.log("sign out user! ");
         // $ionicLoading.show( {template: 'Logout Successful! ', noBackdrop: true, duration:2000 });
         $state.go("login");
     },function(error){
@@ -150,6 +180,11 @@ starter.controller('DashCtrl', function($scope, $state, $stateParams) {
 
 
 starter.controller('ChatsCtrl', function($scope, Chats, $state) {
+  // This looks copy and pasted
+  // Also, they mentioned this in class
+  // wait, did I write this haha
+  // Probably, I was doing this at 12 AM :p 
+
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
   // To listen for when this page is active (for example, to refresh data),
@@ -159,6 +194,9 @@ starter.controller('ChatsCtrl', function($scope, Chats, $state) {
   //});
 
   console.log("chats controller");
+
+  //This was me trying to find the user's email and I couldn't
+  //chats needs a lot of refactoring	
   console.log($scope);
 
   $scope.viewChat = function(chat) {
@@ -257,82 +295,111 @@ starter.controller('ChatDetailCtrl', function($scope, $stateParams) {
 
 
 
-starter.controller('BlogCtrl', function($scope, $state) {
+starter.controller('BlogCtrl', function($scope, $state, $rootScope) {
+  //why is this here? Friends? Why are you thinking that far ahead? Makes 0 sense	
   $scope.settings = {
     enableFriends: true
   };
+
+  $scope.posts = [];
+
+  //for each post in posts
+  //if they belong to the user, add them	
 
   $scope.newPost = function() {
       $state.go('newPost');
   };
 });
 
-starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $state){
-   $scope.id ="";
-   $scope.purpose = "";
-   $scope.typePet = "";
-   $scope.city = "";
-   $scope.state = "";
-   $scope.startDate = "";
-   $scope.endDate = "";
-   $scope.message = "";
-   $scope.active = "";
-  $scope.listPets = [
+starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $state, $rootScope){
+   //why is this not just one object?	
+   //$scope.id ="";
+   //$scope.purpose = "";
+   //$scope.typePet = "";
+   //$scope.city = "";
+   //$scope.state = "";
+   //$scope.startDate = "";
+   //$scope.endDate = "";
+   //$scope.message = "";
+   //$scope.active = "";
+
+   $scope.post = {};
+   //$scope.post.uid = $rootScope.current_user.uid;
+   $scope.post.city = '';
+   $scope.post.state = '';
+   $scope.post.startDate = '';
+   $scope.post.endDate = '';
+   $scope.post.message = '';	
+
+  //enums	 
+  $scope.petTypes = [
     {text: 'Dogs'},
     {text: 'Cats'},
     {text: 'Fish'}
   ];
-  $scope.listUsers = [
+  $scope.userTypes = [
     {text: 'Sitter'},
     {text: 'Owner'}
   ];
-  $scope.selectUsers = {};
-  $scope.selectPets = {};
-  $scope.showUsers=function(){
-    console.log($scope.selectUsers);
-  };
-  $scope.showPets=function(){
-    console.log($scope.selectPets);
-  };
 
+  //these are set when user selects them
+  //could use enabled, but seeing as how we're going to access them
+  //anyway, kind of pointless
+  //Yeah, this is probably best	
+  $scope.post.purpose = {};
+  $scope.post.petTypes = {};
 
-  $scope.listOfPost = {};
+  //if it's a list - then WHY DO YOU HAVE IT AS A JSON ANGRY FACE	
+  //$scope.listOfPost = {};
   //post database
-  $scope.addPostToFirebase = function(post) {
+  $scope.addPostToFirebase = function() {
+    var post_id = firebase.database().ref('/posts').push().set($scope.post);
+    $rootScope.posts.push(post_id);
+    $rootScope.userInfo.posts.push(post_id);
+    console.log($rootScope.userInfo);
+    console.log($rootScope.posts);	   
+    $rootScope.posts.push(post_id);
 
-    firebase.database().ref('/posts').push().set({
-      id: post.id,
-      purpose: post.purpose,
-      typePet: post.typePet,
-      city: post.city,
-      state:post.state,
-      startDate: post.startDate,
-      endDate: post.endDate,
-      message: post.message,
-      active: post.active,
-    });
+    //need to think about how best to update user table	  
+    var ref = firebase.database().ref('/guests');       
+    ref.child(current_user.uid).set($rootScope.userInfo);
+    	  
+
     console.log("posts added to Firebase");
   };
+
+  //added to database list	
 
 
   $scope.editPostInfo = function () {
     var post = {};
+    console.log($scope.post);	  
+
+    console.log($rootScope.current_user);
+
+    $scope.post.email = $rootScope.current_user.email;	  
+    $scope.post.active = document.getElementById("active").checked;
+    $scope.post.uid = $rootScope.current_user.uid;
+
+    //ok I think I get what you guys were trying to do...
+    //but the design needs more work	  
     // email is unique id
-    post.id = firebase.auth().currentUser.email;
+    //post.uid = $rootScope.currentUser.uid;
     // firebase.database().ref().child('posts').push().key;
-    console.log(post.id);
-    post.purpose =$scope.selectUsers;
-    post.typePet= $scope.selectPets;
-    post.city = $scope.city;
-    post.state = $scope.state;
+    //post.purpose = $scope.selectUsers;
+    //post.typePet= $scope.selectPets;
+    //post.city = $scope.city;
+    //post.state = $scope.state;
     // var button = FindViewById<ImageButton> (Resource.Id.myButton);
-    post.startDate = $scope.startDate;
-    post.endDate = $scope.endDate;
-    post.message = $scope.message;
+   // post.startDate = $scope.startDate;
+    //post.endDate = $scope.endDate;
+    //post.message = $scope.message;
+
+    //inconsistent	  
     //active
-    post.active =  document.getElementById("active").checked;
-    $scope.listOfPost[post.id] = post;
-    $scope.addPostToFirebase(post);
+    //post.active =  document.getElementById("active").checked;
+    //$scope.listOfPost[post.id] = post;
+    $scope.addPostToFirebase();
     $ionicLoading.show({ template: 'Post has been added to firebase!', noBackdrop: true, duration: 2000 });
     //$state.go("dash"); // go back to home page
 
@@ -433,6 +500,9 @@ starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $st
 
 });
 starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $state) {
+
+  //name's fine but WTH is this?
+  //no website does this	
   $scope.firstName = "Puppy";
   $scope.lastName = "Dog";
   $scope.phone = "123456";
@@ -444,6 +514,7 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
 
   $scope.listOfPeople = {};
 
+//Huh? We are updating the DB	
 //Constructing the database
   $scope.addGuestToFirebase = function(user) {
       firebase.database().ref('/guests').push().set({
@@ -457,7 +528,7 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
   };
 
 
-
+  //THis is what I'm trying to avoid
   $scope.retrieveGuestsFromFirebase = function() {
     var user = firebase.auth().currentUser; // retrieve curr user
     if (!firebase.auth().currentUser)
@@ -510,6 +581,8 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
     // var button = FindViewById<ImageButton> (Resource.Id.myButton);
     $scope.listOfPeople[user.id] = user;
     $scope.addGuestToFirebase(user);
+
+    //person 	  
     $ionicLoading.show({ template: 'Person has been added to firebase!', noBackdrop: true, duration: 2000 });
     $state.go("dash"); // go back to home page
   };
