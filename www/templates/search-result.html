@@ -1,32 +1,28 @@
 <ion-view view-title="Search Results">
   <ion-content class="padding">
+    <!--<div ng-show="foundNothing">-->
+      <!--<h3>Nothing has been found! Please check your location and search again! </h3>-->
+    <!--</div>-->
 
     <ion-list class="wrapper">
 
-      <ion-item class="field" ng-repeat="post in posts track by $index">
+      <ion-item ng-repeat="post in posts track by $index" class="button button-full">
         <ion-card>
-          <ion-card-header> <h1> {{ post.id }} </h1> </ion-card-header>
-
-          <ion-avatar item-left id="avatar">
-            <img src="">
-          </ion-avatar>
+          <ion-card-header> <h3> {{ post.id }} </h3> </ion-card-header>
 
           <ion-card-content>
             <!--<span id="location">Key {{post.key}}</span>-->
             <span id="city">{{post.city}}</span>
-            <span id="state">{{post.state}}</span>
-            <span id="user identity">{{post.purpose}}</span>
-            <span id="type of pet">{{post.typePet}}</span>
-            <span id="active">Active</span>
+            <span id="user identity">{{post.userIdentity.key}}</span>
+            <span id="type of pet">{{post.pet.key}}</span>
+            <span id="active">{{ active }}</span>
             <span id="date">{{post.startDate}} to {{post.endDate}}</span>
             <p id="messsage">message details... {{post.message}} </p>
-            <button class="button button-block button-positive" ng-click="chatInit()">Chat with the user!</button>
           </ion-card-content>
 
         </ion-card>
 
       </ion-item>
     </ion-list>
-
   </ion-content>
 </ion-view>

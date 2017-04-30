@@ -45,13 +45,13 @@
 
       <div style="float: left; width: 50%;">
         <label class="item item-input">
-          <input type="text" name="photo" id="photo-textarea" ng-model="$parent.photo" placeholder="Profile Picture">
+          <input type="file" name="photo" id="photo-fileinput" onchange="angular.element(this).scope().photoSelected(this.files)">
         </label>
       </div>
 
     </div>
 
-      <div style="float: middle; width: 100%;">
+      <div style="float: none; width: 100%;">
         <button class="button button-full button-positive" ng-click="editUserProfile()">Update to the database! </button>
       </div>
 <!---

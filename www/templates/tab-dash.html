@@ -11,14 +11,18 @@
       </ion-item>
 
       <!-- Three Buttons-->
-      <ion-item style="float: middle; width: 100%">
-        <button class="button button-large button-positive" ng-click="toSearchState()">Search</button>
-        <button class="button button-large button-positive" ng-click="toBlogState()">Blog</button>
-        <button class="button button-large button-positive" ng-click="toChatRoomState()">Chatroom</button>
-        <button class="button button-large button-positive" ng-click="toAccountState()">Account Info</button>
+      <ion-item style="float: none; width: 100%">
+        <p>
+        <button class="dash-up" ng-click="toSearchState()">Search</button>
+        <button class="dash-up" ng-click="toBlogState()">Blog</button>
+        </p>
+        <p>
+        <button class="dash-down" ng-click="toChatRoomState()">Chatroom</button>
+        <button class="dash-down" ng-click="toAccountState()">Account Info</button>
+        </p>
       </ion-item>
         <ion-item>
-            <button class="button button-large button-dark" ng-click="attemptLogout()">Logout</button>
+            <button class="test" ng-click="attemptLogout()">Logout</button>
         </ion-item>
 
     </div>

@@ -13,6 +13,10 @@
 
 var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
+//.run(function($ionicPlatform, $rootScope, $ionicHistory) {
+//  $rootScope.$on('stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+//    $ionicHistory.clearCache();
+//  });
 
   .run(function($ionicPlatform) {
 
@@ -24,9 +28,9 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
 
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 
-        cordova.plugins.Keyboard.disableScroll(true);
+        cordova.plugins.Keyboard.disableScroll(false);
 
 
       }
@@ -149,6 +153,7 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
       })
 
+
       .state('search', {
 
         url: '/search',
@@ -159,13 +164,13 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         params: {
 
-          'city' : null,
+          'city' : "",
 
-          'state' : null,
+          'state' : "",
 
-          'userIdentity' : null,
+          'userIdentity' : { 'Sitter' : false,  'Owner': false },
 
-          'pet' : null
+          'pet' : { 'Dogs' : false,  'Cats': false, 'Fish': false}
 
         }
 
@@ -181,13 +186,13 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         params: {
 
-          'city' : null,
+          'city' : "",
 
-          'state' : null,
+          'state' : "",
 
-          'userIdentity' : null,
+          'userIdentity' : { 'Sitter':false,  'Owner':false },
 
-          'pet' : null
+          'pet' : { 'Dogs':false,  'Cats':false, 'Fish': false}
 
         }
 
@@ -208,7 +213,7 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         url: '/gps',
 
-        templateUrl: 'templates/blog-gps.html',
+        templateUrl: 'tab-gps.html',
 
         //   controller: 'gpsCtrl'
 
@@ -230,4 +235,10 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
     $urlRouterProvider.otherwise('/login');
 
 
-  });
+    }).run(function($ionicPlatform, $rootScope, $ionicHistory) {
+
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+
+        $ionicHistory.clearCache();
+    });
+});

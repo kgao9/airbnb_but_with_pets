@@ -3,6 +3,7 @@
   <ion-content>
     <!-- Cher's added-->
 
+    <img src="img/search_logo.PNG">
       <div class="list" style="float: left; width: 100%;">
         <ion-checkbox ng-repeat="item in listPets" ng-model="selectPets[item.text]" ng-change="showPets()">
           {{ item.text }}
@@ -16,29 +17,20 @@
       </div>
 
 
-      <div class="item item-divider">
-        Location
-        <ion-label>
+      <div class="item">
+        <h1>Location</h1>
+
         <input type="text" name="city" id="city-textarea"
                ng-model="$parent.city" placeholder="Your City">
-        </ion-label>
-        <ion-label>
+
         <input type="text" name="state" id="state-textarea"
                ng-model="$parent.state" placeholder="Your State">
-        </ion-label>
+
       </div>
-    </div>
-
-    <button class="button button-full" ng-click="Search()">Let's find out!</button>
 
 
-    <div class="">
-      <li class="button button-full" ng-repeat="user in users" ng-click="selectUser()">
-        Name: {{ user.firstName }} {{ user.lastName }}
-        Pet: {{ user.petType }}
-        Owner/Sitter: {{ user.userType }}
-      </li>
-    </div>
+    <button class="dash-down" ng-click="Search()">Let's find out!</button>
+
   </ion-content>
 
 
