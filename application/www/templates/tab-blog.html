@@ -1,52 +1,78 @@
 <ion-view view-title="My Posts">
   <ion-content>
-    <!-- TODO: create button for creating new post -->
     <div>
       <button class="button button-full button-stable" ng-click="newPost()">Create New Post</button>
     </div>
 
     <div class="item item-driver" hidden>
-    My Post
     <!--TODO: display cards -->
     <div class="cards-bg social-cards">
-      <ion-card>
-        <!-- first item -->
-        <ion-item align="center">
-          <ion-avatar item-left>
-            <img src="http://tva4.sinaimg.cn/crop.0.0.639.639.180/905accf5jw8f37pd22o8dj20hs0hrq3q.jpg">
-          </ion-avatar>
-          <h2>Puppy {{ user.firstName }} {{user.lastName}}</h2>
-          <p> @Madison {{ user.city }}</p>
-        </ion-item>
-
-        <!-- card content-->
-        <ion-card-content>
-          <!--<img class="full-image" src="my-image.png">-->
-          <p>additional message here... {{ blogMessages }}</p>
-        </ion-card-content>
-
-      </ion-card>
-
-      <ion-row>
-        <ion-col>
-          <ion-note left text-left>
-            Rate: {{user.rating}}/5
-          </ion-note>
-        </ion-col>
-        <ion-col>
-          <button ion-button icon-left clear small>
-            <ion-icon name="text"></ion-icon>
-            <div>4 Comments</div>
-          </button>
-        </ion-col>
-        <ion-col center text-center>
-          <ion-note>
-            {{ date }}
-          </ion-note>
-        </ion-col>
-      </ion-row>
+     <ion-list class="wrapper">
+       <ion-item ng-repeat="myPost in myPosts track by $index" id="myPost">
+         <ion-card>
+           <ion-card-header> <h3> Date {{ post.startDate }} - {{ post.endDate }} </h3> </ion-card-header>
+           <ion-card-content>
+             <!--<span id="location">Key {{post.key}}</span>-->
+             <!--<span id="city">{{post.city}} {{post.state}}</span>-->
+             <span id="user identity">{{post.userIdentity.key}}</span>
+             <span id="type of pet">{{post.pet.key}}</span>
+             <!--<span id="active">{{ active }}</span>-->
+               <ion-toggle ng-model="active" ng-change="disablePost()">ACTIVE</ion-toggle>
+             <span id="date">{{post.startDate}} to {{post.endDate}}</span>
+             <p id="messsage">message details... {{post.message}} </p>
+           </ion-card-content>
+         </ion-card>
+       </ion-item>
+       </ion-item>
+     </ion-list>
     </div>
     </div>
+
+    <div ng-show="noPost">
+      <h3>You have no posts right now...</h3>
+    </div>
+
+
+
+      <!--<ion-card>-->
+        <!--&lt;!&ndash; first item &ndash;&gt;-->
+        <!--<ion-item align="center">-->
+          <!--<ion-avatar item-left>-->
+            <!--<img src="http://tva4.sinaimg.cn/crop.0.0.639.639.180/905accf5jw8f37pd22o8dj20hs0hrq3q.jpg">-->
+          <!--</ion-avatar>-->
+          <!--<h2>Puppy {{ user.firstName }} {{user.lastName}}</h2>-->
+          <!--<p> @Madison {{ user.city }}</p>-->
+        <!--</ion-item>-->
+
+        <!--&lt;!&ndash; card content&ndash;&gt;-->
+        <!--<ion-card-content>-->
+          <!--&lt;!&ndash;<img class="full-image" src="my-image.png">&ndash;&gt;-->
+          <!--<p>additional message here... {{ blogMessages }}</p>-->
+        <!--</ion-card-content>-->
+
+      <!--</ion-card>-->
+
+      <!--<ion-row>-->
+        <!--<ion-col>-->
+          <!--<ion-note left text-left>-->
+            <!--Rate: {{user.rating}}/5-->
+          <!--</ion-note>-->
+        <!--</ion-col>-->
+        <!--<ion-col>-->
+          <!--<button ion-button icon-left clear small>-->
+            <!--<ion-icon name="text"></ion-icon>-->
+            <!--<div>4 Comments</div>-->
+          <!--</button>-->
+        <!--</ion-col>-->
+        <!--<ion-col center text-center>-->
+          <!--<ion-note>-->
+            <!--{{ date }}-->
+          <!--</ion-note>-->
+        <!--</ion-col>-->
+      <!--</ion-row>-->
+    <!--</div>-->
+    <!--</div>-->
+
 
   </ion-content>
 </ion-view>

@@ -12,7 +12,9 @@ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHi
      ref = firebase.database().ref('/posts');          
      ref.on("value", function(all_posts){                 
 	     $rootScope.posts = all_posts.val();         
-     }, (function(error) {$rootScope.all_posts; }));
+     }, (function(error) {$rootScope.posts = {};}));
+
+    	
 
     $scope.email = "";//"kitten@petbnb.com";
     $scope.password = "";//"123456";
@@ -29,17 +31,6 @@ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHi
         }
     });
 
-
-  // TODO: signin function - done
-  $scope.createUser = function(email, password) {
-      return firebase.auth().createUserWithEmailAndPassword(email,password).then(function(){
-          $ionicLoading.show({template:'Created New User!',noBackdrop:true,duration:2000});
-      }).catch(function(error){
-          var errorCode=error.code;
-          var errorMessage=error.message;
-          $ionicLoading.show({template:'Fail to Create New User! Try again!',noBackdrop:true,duration:2000});
-      });
-  };
 
   //There's login and attempt Login
   //which do I use? Makes no sense
@@ -78,11 +69,36 @@ starter.controller('LoginCtrl', function($scope, $ionicLoading, $state, $ionicHi
 	//Why? user can tell when it goes to the dashboard
 	//No other site does this
         //$ionicLoading.show({template:'Successfully Login with Existing User!',noBackdrop:true,duration:2000});
-	var ref = firebase.database().ref('/guests/' + $rootScope.current_user.uid);
 	
+        // search in database find same id
+        $rootScope.myPosts = [];   
+	var ref = firebase.database().ref("posts");
+        ref.orderByChild("uid").equalTo($rootScope.current_user.uid).on("value", function(all_post_obj) {   
+	    console.log(all_post_obj)  	
+            // not display     
+	    all_post_obj.forEach(function(data) {
+		    console.log(data);
+	            data = data.val();
+	            $rootScope.myPosts.push(data);
+	              });
+
+            console.log($rootScope.myPosts);		
+            }), function(error) {};		
+
+	ref = firebase.database().ref('/guests/' + $rootScope.current_user.uid);      
 	ref.on("value", function(user_obj){                   
 		    $rootScope.userInfo = user_obj.val();
-	        }, (function(error) {$rootScope.userInfo = {}; }));
+
+		    console.log($rootScope.userInfo);
+
+		    if($rootScope.userInfo.posts == '')
+			$rootScope.userInfo.posts = [];
+
+		    if($rootScope.userInfo.messages == '')
+			$rootScope.userInfo.messages = [];
+
+		    console.log("here");
+	        }, (function(error) {$rootScope.userInfo = {}; console.log("here")}));
 
 	//go to dash board
         $state.go("dash");
@@ -111,6 +127,7 @@ starter.controller('SignupCtrl', function($scope, $ionicLoading, $state, $ionicH
 
       //we want to store all their posts and messages	    
       $rootScope.current_user = current_user;
+      $rootScope.myPosts = [];	     
 
       //We want the user to have access to their firstName, lastName, location
       // their pets and their phone
@@ -121,15 +138,23 @@ starter.controller('SignupCtrl', function($scope, $ionicLoading, $state, $ionicH
       userObj.location = $scope.location;
       userObj.pets = $scope.pets;
       userObj.phone = $scope.phone;
-      userObj.posts = [];
-      userObj.messages = [];	    
+
+      //hack
+      //This is so fields exist in DB 	    
+      userObj.posts = '';
+      userObj.messages = '';	    
 
       //we stash this in rootScope	    
       $rootScope.userInfo = userObj;	    
 
       var ref = firebase.database().ref('/guests');
       ref.child(current_user.uid).set(userObj);
+
+       //set them to what they are supposed to be: empty lists	    
+       userObj.posts = [];
+       userObj.messages = [];	    
       //push userObj	    
+
 
       $state.go("dash");
     }).catch(function(error){
@@ -301,7 +326,14 @@ starter.controller('BlogCtrl', function($scope, $state, $rootScope) {
     enableFriends: true
   };
 
-  $scope.posts = [];
+  $scope.myPosts = $rootScope.myPosts;
+  $scope.numPosts = $scope.myPosts.length;
+  
+  if($scope.numposts == 0)
+	$scope.noPost = true;
+
+  else
+	$scope.noPost = false;	
 
   //for each post in posts
   //if they belong to the user, add them	
@@ -312,16 +344,6 @@ starter.controller('BlogCtrl', function($scope, $state, $rootScope) {
 });
 
 starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $state, $rootScope){
-   //why is this not just one object?	
-   //$scope.id ="";
-   //$scope.purpose = "";
-   //$scope.typePet = "";
-   //$scope.city = "";
-   //$scope.state = "";
-   //$scope.startDate = "";
-   //$scope.endDate = "";
-   //$scope.message = "";
-   //$scope.active = "";
 
    $scope.post = {};
    //$scope.post.uid = $rootScope.current_user.uid;
@@ -353,16 +375,23 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
   //$scope.listOfPost = {};
   //post database
   $scope.addPostToFirebase = function() {
-    var post_id = firebase.database().ref('/posts').push().set($scope.post);
-    $rootScope.posts.push(post_id);
-    $rootScope.userInfo.posts.push(post_id);
+    var post_id = firebase.database().ref('/posts').push()//.set($scope.post);
+    post_id.set($scope.post);	  
+
+    $rootScope.posts[post_id.key] = $scope.post;
+
+    console.log($rootScope.userInfo);	  
+
+    $rootScope.userInfo.posts.push(post_id.key);
+    $rootScope.myPosts.push($scope.post);
+
+    console.log($rootScope.posts);
     console.log($rootScope.userInfo);
-    console.log($rootScope.posts);	   
-    $rootScope.posts.push(post_id);
+    console.log($rootScope.myPosts);	  
 
     //need to think about how best to update user table	  
     var ref = firebase.database().ref('/guests');       
-    ref.child(current_user.uid).set($rootScope.userInfo);
+    ref.child($rootScope.current_user.uid).set($rootScope.userInfo);
     	  
 
     console.log("posts added to Firebase");
@@ -401,7 +430,7 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
     //$scope.listOfPost[post.id] = post;
     $scope.addPostToFirebase();
     $ionicLoading.show({ template: 'Post has been added to firebase!', noBackdrop: true, duration: 2000 });
-    //$state.go("dash"); // go back to home page
+    $state.go("blog"); // go back to home page
 
   };
   $scope.getLocation = function () {
@@ -413,33 +442,10 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
   };
 
 });
-starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $state) {
-  var myUserId = firebase.auth().currentUser.email;
-  console.log(myUserId);
 
-  //functions to implement:
-  // function findPosts:
-  // input list of posts
-  // input postObj with user input 
-  // logic:
-	// for each post in post,
-		// if post matches all of user input
-	        // push post to returnlist
-	// return return list
-	// how do we know if a post matches user input
-	// if user input isn't "" and it has the same value
-	// That way, users aren't forced to enter in everything
-
-  //so what does user input look like?
-	//Looks like
-	//{
-	//    list of valid pets
-	//    city
-	//    location
-	//    owner type
-	//}	
-
-  //huh? WTH?	
+starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $state, $stateParams) {
+  //var myUserId = firebase.auth().currentUser.email;
+  //console.log(myUserId);
   // Find all dinosaurs whose height is exactly 25 meters.
 
   $scope.listPets = [
@@ -451,54 +457,113 @@ starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $st
     {text: 'Sitter'},
     {text: 'Owner'}
   ];
-  $scope.selectUsers = {};
-  $scope.selectPets = {};
+  $scope.selectUsers = $stateParams.userIdentity
+
+  $scope.selectPets = $stateParams.pet;
+
+  $scope.errorMessage = ""
+
+  console.log($scope.selectUsers);
   $scope.showUsers=function(){
-    console.log($scope.selectUsers);
+    // var userString = JSON.stringify($scope.selectUsers)
+    // console.log(userString);
+    // var userIdentity = JSON.parse(userString)
+    //$stateParams.userIdentity = $scope.selectUsers;
+     //console.log($scope.selectUsers);
+     //console.log($scope.selectUsers.text);
+     console.log($scope.selectUsers)
   };
+
   $scope.showPets=function(){
-    console.log($scope.selectPets);
+   // console.log($scope.selectPets);
+    // var petString = JSON.stringify($scope.selectPets);
+    //$stateParams.pet = $scope.selectPets;
+    console.log($scope.selectPets)
   };
+
   $scope.Search=function () {
-    //if active equals to true
-    var ref = firebase.database().ref("posts");
-    console.log(ref);
-    var ref = firebase.database().ref("/posts");
-    ref.orderByChild("active").equalTo("true").on("child_added", function(snapshot) {
-      console.log(snapshot.key);
+    // pass to search result page
+    if (!$scope.city) {
+        $scope.errorMessage = "You must enter a city";
+        return
+    }
+
+    $state.go('searchResult', {
+      'city' : $scope.city,
+
+      'state' : $scope.state,
+
+       'pet' : $scope.selectPets
     });
-
-    ref.orderByChild("id").equalTo("kitten@petbnb.com").on("child_added", function(snapshot) {
-      var allSelected = snapshot.key;
-    });
-    console.log(allSelected);
-    //Search State
-    var userState = $scope.state;
-      allSelected.orderByChild("state").equalTo(userState).on("child_added", function(snapshot) {
-        var stateSelected = snapshot.key;
-      });
-    console.log(stateSelected);
-    //Search City
-    var userCity = $scope.city;
-    stateSelected.orderByChild("city").equalTo(userCity).on("child_added", function(snapshot) {
-      var citySelected = snapshot.key;
-    });
-    console.log(citySelected);
-    //Search Type
-    var userType = $scope.purpose;
-    citySelected.orderByChild("purpose").equalTo(userType).on("child_added", function(snapshot) {
-      var finalSelected = snapshot.key;
-    });
-    console.log(finalSelected);
-  }
-
-
-
-
-
+  };
 
 
 });
+
+
+starter.controller('SearchResultCtrl', function($scope, $stateParams, $state) {
+  console.log("**** Search Result Ctrl *****");
+  console.log($stateParams.pet);
+  console.log($stateParams.state);
+  console.log($stateParams.city);
+  
+  $scope.lettersDifferent = function (string1, string2) {
+      //different length, just assume no match
+      if(string1.length != string2.length)
+          return 1;
+
+      var diff_count = 0;
+      var i;
+      for(i = 0; i < string1.length; i++)
+      {
+          if(string1.charAt(i) != string2.charAt(i))
+              diff_count++;
+      }
+
+      return diff_count/string1.length;  
+  }
+
+  var selectedPosts = [];
+
+  for(post in $rootScope.posts)
+  {
+      if(post.uid == $rootScope.current_user.uid)
+          continue;
+
+      var number = 0;
+      var petTypes = post.pets.keys();
+
+      //filter on petType
+      for(petType in petTypes)
+      {
+         if(post.pets[petType] == true && $stateParams.indexOf(petType) > -1)
+         {
+             number += 300; 
+         }
+      }  
+
+      //filter on state
+      if($scope.lettersDifferent(post.state, $stateParams.state) > 0.75)
+      {
+          number += 300;
+      }  
+      
+      //filter on city
+      if($scope.lettersDifferent(post.city, $stateParams.city) > 0.75)
+      {
+        number += 300;
+      }  
+
+      post.search_number = number;
+
+      if(number >= 300)
+        selectedPosts.push(post);
+  }  
+
+  //what's left? sort by selectedPosts.postnumber
+
+});
+
 starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $state) {
 
   //name's fine but WTH is this?
