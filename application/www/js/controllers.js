@@ -443,7 +443,7 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
 
 });
 
-starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $state, $stateParams) {
+starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $state) {
   //var myUserId = firebase.auth().currentUser.email;
   //console.log(myUserId);
   // Find all dinosaurs whose height is exactly 25 meters.
@@ -457,13 +457,12 @@ starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $st
     {text: 'Sitter'},
     {text: 'Owner'}
   ];
-  $scope.selectUsers = $stateParams.userIdentity
+  $scope.selectUsers = {'Sitter': false, 'Owner': false};
 
-  $scope.selectPets = $stateParams.pet;
+  $scope.selectPets = {'Dogs': false, 'Cats': false, 'Fish': false};
 
   $scope.errorMessage = ""
 
-  console.log($scope.selectUsers);
   $scope.showUsers=function(){
     // var userString = JSON.stringify($scope.selectUsers)
     // console.log(userString);
@@ -483,17 +482,21 @@ starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $st
 
   $scope.Search=function () {
     // pass to search result page
-    if (!$scope.city) {
-        $scope.errorMessage = "You must enter a city";
-        return
-    }
+    //if (!$scope.city) {
+      //  $scope.errorMessage = "You must enter a city";
+        //return
+    //}
+
+    console.log($scope.selectPets);
 
     $state.go('searchResult', {
       'city' : $scope.city,
 
       'state' : $scope.state,
 
-       'pet' : $scope.selectPets
+       'pet' : $scope.selectPets,
+
+       'userIdentity' : $scope.selectUsers
     });
   };
 
@@ -501,13 +504,16 @@ starter.controller("SearchCtrl",function($scope, $ionicModal, $ionicLoading, $st
 });
 
 
-starter.controller('SearchResultCtrl', function($scope, $stateParams, $state) {
+starter.controller('SearchResultCtrl', function($scope, $stateParams, $state, $rootScope) {
   console.log("**** Search Result Ctrl *****");
   console.log($stateParams.pet);
   console.log($stateParams.state);
   console.log($stateParams.city);
+  console.log($stateParams.userIdentity);
   
   $scope.lettersDifferent = function (string1, string2) {
+      string1 = string1.toUpperCase();
+      string2 = string2.toUpperCase();
       //different length, just assume no match
       if(string1.length != string2.length)
           return 1;
@@ -525,31 +531,48 @@ starter.controller('SearchResultCtrl', function($scope, $stateParams, $state) {
 
   var selectedPosts = [];
 
-  for(post in $rootScope.posts)
+  console.log($rootScope.posts);
+
+  for(post_id in $rootScope.posts)
   {
+      var post = $rootScope.posts[post_id];
+      console.log(post);
       if(post.uid == $rootScope.current_user.uid)
           continue;
 
       var number = 0;
-      var petTypes = post.pets.keys();
+      //var petTypes = post.pets.keys();
+
+      //filter on userType
+      for(userType in post.purpose)
+      {
+         if(post.purpose[userType] == true && $stateParams.userIdentity[userType] == true)
+         {
+             number += 300; 
+         }
+      }  
 
       //filter on petType
-      for(petType in petTypes)
+      for(petType in post.pets)
       {
-         if(post.pets[petType] == true && $stateParams.indexOf(petType) > -1)
+         console.log("pet type", petType);
+         console.log("post.petType", post.pets[petType]);
+         console.log("stateParams.pet[petType]", $stateParams.pet[petType]);
+
+         if(post.pets[petType] == true && $stateParams.pet[petType] == true)
          {
              number += 300; 
          }
       }  
 
       //filter on state
-      if($scope.lettersDifferent(post.state, $stateParams.state) > 0.75)
+      if($scope.lettersDifferent(post.state, $stateParams.state) <= 0.25)
       {
           number += 300;
       }  
       
       //filter on city
-      if($scope.lettersDifferent(post.city, $stateParams.city) > 0.75)
+      if($scope.lettersDifferent(post.city, $stateParams.city) <= 0.25)
       {
         number += 300;
       }  
@@ -559,6 +582,15 @@ starter.controller('SearchResultCtrl', function($scope, $stateParams, $state) {
       if(number >= 300)
         selectedPosts.push(post);
   }  
+
+  $scope.posts = selectedPosts;
+  $scope.numPosts = selectedPosts.length;  
+
+  console.log($scope.posts);
+
+  $scope.posts.sort(function(a,b) { return a.search_number - b.search_number });
+
+  console.log($scope.posts); 
 
   //what's left? sort by selectedPosts.postnumber
 

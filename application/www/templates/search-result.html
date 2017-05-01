@@ -1,0 +1,28 @@
+<ion-view view-title="Search Results">
+  <ion-content class="padding">
+    <!--<div ng-show="foundNothing">-->
+      <!--<h3>Nothing has been found! Please check your location and search again! </h3>-->
+    <!--</div>-->
+
+    <ion-list class="wrapper">
+
+      <ion-item ng-repeat="post in posts track by $index" class="button button-full">
+        <ion-card>
+          <ion-card-header> <h3> {{ post.id }} </h3> </ion-card-header>
+
+          <ion-card-content>
+            <!--<span id="location">Key {{post.key}}</span>-->
+            <span id="city">{{post.city}}</span>
+            <span id="user identity">{{post.userIdentity.key}}</span>
+            <span id="type of pet">{{post.pet.key}}</span>
+            <span id="active">{{ active }}</span>
+            <span id="date">{{post.startDate}} to {{post.endDate}}</span>
+            <p id="messsage">message details... {{post.message}} </p>
+          </ion-card-content>
+
+        </ion-card>
+
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

@@ -161,6 +161,28 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
       })
 
+      .state('searchResult', {
+
+        url: '/searchResult',
+
+        templateUrl: 'templates/search-result.html',
+
+        controller: 'SearchResultCtrl',
+
+        params: {
+
+          'city' : "",
+
+          'state' : "",
+
+          'userIdentity' : { 'Sitter':false,  'Owner':false },
+
+          'pet' : { 'Dogs':false,  'Cats':false, 'Fish': false}
+
+        }
+
+      })
+
 
       .state('blog', {
 
