@@ -1,87 +1,197 @@
+/*
+#4E4E4F;  deep grey - font color
+7D8A2E; dark green - btn hover
+C9D787; shallow green
+FFFFFF; white
+FFC0A9; shallow pink
+FF8598; dark pink - btn
+*/
 
 
-
-
-  *{
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    background-color: #ffffff;
-    background-image: url("pet-bnb.jpg");
-    font-weight: 300;
-    border: none !important;
-    background-repeat: no-repeat;
-    background-blend-mode: color-dodge;
-    font-style:italic;
-    color:darkmagenta;
-  }
-.botton{
-  cursor: pointer;
+* {
+box-sizing: border-box;
 }
-  div
-  {
+
+*:focus {
+	outline: none;
+}
+body {
+    background-color: #FFFFFF;
+    /* background-image: url("../img/cat.jpg");*/
+    margin: auto;
+    padding: 10 px;
+}
+
+.login {
+    margin: auto;
+    width: 90%;
+
+}
+
+.center {
+    margin: auto;
+    width: 100%;
+    padding: 10px;
+}
+
+.login-screen {
+    background-color: #FFF;
+    padding:  10 px;
+    border-radius: 3 px;
+    margin: 10px;
+    float : center;
+}
+
+/*.app-title h1{
     text-align: center;
-  }
+    color: #4E4E4F;
+}*/
 
-  .test
-  {
-    background-color: #ff8;
-    float: left;
-    width: 100px;
-    height: 50px;
-  }
-
-  .test:first-child
-  {
-    background-color: #f8f;
-   float: none;
-  }
-
-  .test:last-child
-  {
-    background-color: #ff8660;
-    float: right;
-  }
-
-
-
-.dash-up
-{
-  background-color: #4cd964;
-  width:200px;
-  height:100px;
-  float:none;
-
+.app-title img{
+    min-width: 100px;
+    max-width: 200px;
+    margin-top: 1vw;
+    float: center;
 }
-.dash-up:first-child{
-  background-color:#8ff;
-  float: none;
+/*
+.dash-profile img{
+    min-width: 80px;
+    max-width: 120px;
+}*/
+
+.avatar {
+    min-width: 80px;
+    max-width: 120px;
+    float: center;
+    margin-top: 1vw;
+    margin-right: 1vw;
+    position: relative;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
 }
 
-  .dash-down
-  {
-    background-color: #FF8383;
-    width:200px;
-    height:100px;
-    float:none;
-    bottom: 0px;
-  }
-  .dash-down:first-child{
-    background-color:#0c60ee;
-    float: none;
-    bottom:0px;
-  }
 
-h1{
-  font-weight: 200;
-  font-style:italic;
-  color:red;
+.app-logo{
+    max-width: 200px;
+    max-height: 20px;
+    float: center;
 }
 
-  .loading{
-    background-color:white!important;
-    width: 25% !important;
-    border-width: 2px !important;
-    border-color: transparent !important;
-    fill: none;
-  }
+.control-group {
+
+}
+
+input {
+    text-align: center;
+    background-color: #ECF0F1;
+    border: 2px solid transparent;
+    border-radius: 3px;
+    font-size: 16px;
+    font-weight: 200;
+    padding: 10px 0;
+    width: 250px;
+    transition: border .2s;
+}
+
+input:focus {
+    border: 2px solid #7D8A2E;
+    box-shadow: none;
+    margin-top: 3vw;
+}
+
+.btn {
+  border: 2px solid transparent;
+  background: #FF8598;
+  color: #ffffff;
+  font-size: 16px;
+  line-height: 25px;
+  padding: 10px 0;
+  text-decoration: none;
+  text-shadow: none;
+  border-radius: 3px;
+  box-shadow: none;
+  transition: 0.25s;
+  display: block;
+  width: 250px;
+  margin: 0 auto;
+  margin-top: 3vw;
+  style: ion-button;
+}
+
+.btn-dash {
+    border: 2px solid transparent;
+      background: #FF8598;
+      color: #ffffff;
+      font-size: 20px;
+      line-height: 25px;
+      padding: 10px 0; /*control button width*/
+      text-decoration: none;
+      text-shadow: none;
+      border-radius: 3px;
+      box-shadow: none;
+      transition: 0.25s;
+      display: large;
+      width: 75%;
+      margin: 0 auto;
+      margin-top: 3vw;
+      margin-right: 1vw;
+      margin-left: 1vw;
+      float: center;
+}
+.btn-logout{
+    /*
+    border-radius: 0px;
+    background: #4E4E4F;
+    width: 100%;
+    margin-top: 3vw;
+    display: full;
+    float : center;
+    */
+    background: #4E4E4F;
+}
+
+.btn-account {
+    width: 100%;
+    margin-top: 3vw;
+    float : center;
+}
+
+.small-btn {
+    width: 40%;
+}
+
+.btn : hover {
+  background-color: #7D8A2E;
+}
+
+.login-link {
+  font-size: 12px;
+  color: #4E4E4F; /* deep grey*/
+  display: block;
+  margin-top: 12px;
+  display: block;
+  align-content: center;
+}
+
+.dash-content {
+    margin-top:2vw;
+}
+
+
+.search-input {
+    width: 90%;
+    margin-top:2vw;
+    margin-bottom:2vw;
+}
+
+.divider item {
+    margin : auto;
+    margin-top: 5vw;
+}
+
+.location-input {
+    padding: 5px;
+    width: 50%;
+    align: left;
+}

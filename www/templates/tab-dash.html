@@ -1,29 +1,36 @@
-<ion-view view-title="Home!">
+<ion-view view-title="">
   <ion-content class="padding">
     <!-- TODO: make personal profile-->
-    <div class="list card" align="center">
-        <canvas class="header" width="200" height="70" id="header-blur"></canvas>
-        <div class="profile-picture big-profile-picture" align="center">
-          <img style="round" src=http://tva4.sinaimg.cn/crop.0.0.639.639.180/905accf5jw8f37pd22o8dj20hs0hrq3q.jpg>
+    <div class="dash-content" align="center">
+        <div class="dash-profile" ng-show=true id="havePost">
+            <!--<canvas class="header" width="100" height="70" id="header-blur"></canvas>-->
+            <div class="profile-picture big-profile-picture" align="center">
+                <img class="avatar" ng-src= "{{user.photo}}" ng-show="!dafaultPhoto">
+                <img class="avatar" src="img/default_photo.png" ng-show="dafaultPhoto">
+            </div>
+            <h2 class="profile-name dark"> {{user.firstName}} {{user.lastName}}</h2>
+            <div class="profile-info">{{user.aboutUser}}</div>
         </div>
-        <h2 class="profile-name dark"> {{user.firstName}} {{user.lastName}}</h2>
-        <div class="profile-info">{{user.description}}</div>
-      </ion-item>
+
+        <!-- no post-->
+        <div class="dash-profile" ng-show=false id="noPost">
+            <!--<canvas class="header" width="200" height="70" id="header-blur"></canvas>-->
+            <div class= "dash-profile" align="center">
+                <img class="avatar" src="img/default_photo.png" ng-show="dafaultPhoto">
+            </div>
+            <h3>No Personal Info! Please Update Your Account</h3>
+        </div>
 
       <!-- Three Buttons-->
-      <ion-item style="float: none; width: 100%">
-        <p>
-        <button class="dash-up" ng-click="toSearchState()">Search</button>
-        <button class="dash-up" ng-click="toBlogState()">Blog</button>
-        </p>
-        <p>
-        <button class="dash-down" ng-click="toChatRoomState()">Chatroom</button>
-        <button class="dash-down" ng-click="toAccountState()">Account Info</button>
-        </p>
-      </ion-item>
-        <ion-item>
-            <button class="test" ng-click="attemptLogout()">Logout</button>
-        </ion-item>
+      <div style="float: middle; width: 100%">
+        <button class="btn-dash" href="#" ng-click="toSearchState()">SEARCH</button>
+        <button class="btn-dash" href="#" ng-click="toBlogState()">POST</button>
+        <!--<button class="btn-dash" href="#" ng-click="toChatRoomState()">Chatroom</button>-->
+        <button class="btn-dash" href="#" ng-click="toAccountState()">UPDATE PROFILE</button>
+      </div>
+        <div>
+            <button class="btn-dash btn-logout" ng-click="attemptLogout()">LOG OUT</button>
+        </div>
 
     </div>
 

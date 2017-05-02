@@ -70,7 +70,19 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         controller:'LoginCtrl',
 
-        params: { 'user' : null }
+        params: { 'user' : {
+            'id': '',
+            'firstName' : '',
+            'lastName' : '',
+            'gender' : '',
+            'email' : '',
+            'phone' : '',
+            'city' : '',
+            'state' : '',
+            'photoUrl' : '',
+            'pets':'',
+            'aboutUser' : ''
+        } }
 
       })
 
@@ -100,7 +112,19 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         controller: 'DashCtrl',
 
-        params: { 'user' : null }
+        params: { 'user' : {
+                    'id': '',
+                    'firstName' : '',
+                    'lastName' : '',
+                    'gender' : null,
+                    'email' : '',
+                    'phone' : '',
+                    'city' : '',
+                    'state' : '',
+                    'photoUrl' : '',
+                    'pets':'',
+                    'aboutUser' : ''
+                } }
 
       })
 
@@ -118,27 +142,25 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
       })
 
 
-      .state('chats', {
+//      .state('chats', {
+//
+//        url: '/chats',
+//
+//        templateUrl: 'templates/tab-chats.html',
+//
+//        controller: 'ChatsCtrl',
+//
+//      })
 
-        url: '/chats',
-
-        templateUrl: 'templates/tab-chats.html',
-
-        controller: 'ChatsCtrl',
-
-
-
-      })
-
-      .state('chat-detail', {
-
-        url: '/chats/:name',
-
-        templateUrl: 'templates/chat-detail.html',
-
-        controller: 'ChatDetailCtrl',
-
-      })
+//      .state('chat-detail', {
+//
+//        url: '/chats/:name',
+//
+//        templateUrl: 'templates/chat-detail.html',
+//
+//        controller: 'ChatDetailCtrl',
+//
+//      })
 
 
       .state('account', {
@@ -149,10 +171,21 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         controller: 'AccountCtrl',
 
-        params: { 'user' : null }
+        params: { 'user' : {
+                    'id': '',
+                    'firstName' : '',
+                    'lastName' : '',
+                    'gender' : '',
+                    'email' : '',
+                    'phone' : '',
+                    'city' : '',
+                    'state' : '',
+                    'photoUrl' : '',
+                    'pets':'',
+                    'aboutUser' : ''
+                } }
 
       })
-
 
       .state('search', {
 
@@ -205,19 +238,33 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl: 'templates/tab-blog.html',
 
-        controller: 'BlogCtrl'
+        controller: 'BlogCtrl',
+
+        params: {
+          'uid': '',
+          'purpose' : '',
+          'pets' : '',
+          'city' : '',
+          'state' : '',
+          'startDate' : '',
+          'endDate' : '',
+          'active' : '',
+          'message' : ''
+
+        }
+
 
       })
 
-      .state('gps', {
-
-        url: '/gps',
-
-        templateUrl: 'tab-gps.html',
-
-        //   controller: 'gpsCtrl'
-
-      })
+//      .state('gps', {
+//
+//        url: '/gps',
+//
+//        templateUrl: 'templates/blog-gps.html',
+//
+//        //   controller: 'gpsCtrl'
+//
+//      })
 
       .state('newPost', {
 
@@ -225,7 +272,21 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl: 'templates/blog-newpost.html',
 
-        controller: 'NewPostCtrl'
+        controller: 'NewPostCtrl',
+
+        params: {
+          'uid': '',
+          'purpose' : '',
+          'pets' : '',
+          'city' : '',
+          'state' : '',
+          'startDate' : '',
+          'endDate' : '',
+          'active' : '',
+          'message' : ''
+
+        }
+
 
       });
 

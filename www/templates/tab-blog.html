@@ -4,28 +4,31 @@
       <button class="button button-full button-stable" ng-click="newPost()">Create New Post</button>
     </div>
 
-    <div class="item item-driver" hidden>
+    <div class="item item-driver" ng-show="!noPost">
     <!--TODO: display cards -->
-    <div class="cards-bg social-cards">
-     <ion-list class="wrapper">
-       <ion-item ng-repeat="myPost in myPosts track by $index" id="myPost">
-         <ion-card>
-           <ion-card-header> <h3> Date {{ post.startDate }} - {{ post.endDate }} </h3> </ion-card-header>
-           <ion-card-content>
-             <!--<span id="location">Key {{post.key}}</span>-->
-             <!--<span id="city">{{post.city}} {{post.state}}</span>-->
-             <span id="user identity">{{post.userIdentity.key}}</span>
-             <span id="type of pet">{{post.pet.key}}</span>
-             <!--<span id="active">{{ active }}</span>-->
-               <ion-toggle ng-model="active" ng-change="disablePost()">ACTIVE</ion-toggle>
-             <span id="date">{{post.startDate}} to {{post.endDate}}</span>
-             <p id="messsage">message details... {{post.message}} </p>
-           </ion-card-content>
-         </ion-card>
-       </ion-item>
-       </ion-item>
-     </ion-list>
-    </div>
+      <div class="cards-bg social-cards">
+       <ion-list class="wrapper">
+
+         <ion-item ng-repeat="post in myPosts track by $index" id="myPost">
+           <ion-card>
+             <ion-item>
+               <h2> {{post.startDate}} To {{post.endDate}} </h2>
+               <p>@ {{ post.city }}, {{post.state}} </p>
+             </ion-item>
+
+             <ion-card-content>
+               <p id="purpose">I'm looking for {{pets}}</p>
+               <p id="pets">I want to be a {{purpose}}</p>
+               <p id="messsage">Message: {{post.message}} </p>
+             </ion-card-content>
+             <ion-toggle ng-model=post.active ng-change="disable(post)">Diable</ion-toggle>
+             <button class="button-small" ng-click="deletePost(post)">
+             </button>
+           </ion-card>
+         </ion-item>
+
+       </ion-list>
+      </div>
     </div>
 
     <div ng-show="noPost">

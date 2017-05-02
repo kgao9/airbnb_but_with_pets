@@ -1,36 +1,52 @@
 <ion-view view-title="Search">
 
-  <ion-content>
-    <!-- Cher's added-->
+  <ion-content class="padding">
 
-    <img src="img/search_logo.PNG">
-      <div class="list" style="float: left; width: 100%;">
-        <ion-checkbox ng-repeat="item in listPets" ng-model="selectPets[item.text]" ng-change="showPets()">
-          {{ item.text }}
-        </ion-checkbox>
-      </div>
-
-      <div class="list" style="float: left; width: 100%;">
-        <ion-checkbox ng-repeat="item in listUsers" ng-model="selectUsers[item.text]" ng-change="showUsers()">
-          {{ item.text }}
-        </ion-checkbox>
-      </div>
-
-
-      <div class="item">
-        <h1>Location</h1>
-
-        <input type="text" name="city" id="city-textarea"
+    <div class="divider">
+      <list-header>
+        <h4>Location</h4>
+      </list-header>
+      <div class="">
+      <lable> CITY*</lable>
+      <input class="location-input" type="text" class="search-input" name="city" id="city-textarea"
                ng-model="$parent.city" placeholder="Your City">
-
-        <input type="text" name="state" id="state-textarea"
-               ng-model="$parent.state" placeholder="Your State">
-
+        <lable>STATE*
+          <input class="location-input" type="text" name="state" class="search-input" id="state-textarea"
+                 ng-model="$parent.state" placeholder="Your State">
+        </lable>
       </div>
 
+      <div class="location-input">
 
-    <button class="dash-down" ng-click="Search()">Let's find out!</button>
+      </div>
+    </div>
 
+
+    <div class="divider">
+      <ion-list-header>
+        <h4>Pet Type</h4>
+      </ion-list-header>
+      <div class="list">
+        <ion-checkbox color="dark" ng-repeat="item in listPets" ng-model="selectPets[item.text]" ng-change="showPets()">
+          {{ item.text }}
+        </ion-checkbox>
+      </div>
+    </div>
+
+    <div class="divider">
+      <ion-list-header>
+        <h4>User Identity</h4>
+      </ion-list-header>
+      <div class="list">
+        <ion-checkbox color="dark" ng-repeat="item in listUsers" ng-model="selectUsers[item.text]" ng-change="showUsers()">
+          {{ item.text }}
+        </ion-checkbox>
+      </div>
+    </div>
+
+    <div>
+    <button class="btn btn-account" ng-click="Search()">Let's find out!</button>
+    </div>
   </ion-content>
 
 

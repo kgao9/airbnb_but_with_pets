@@ -1,0 +1,95 @@
+.photoCircle {
+    border-radius: 50%;
+    width: 200px;
+    height: 100px;
+    border: 1px solid black;
+}
+
+.edit_profile {
+    style : left;
+}
+
+
+/*
+  *{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    font-weight: 300;
+    border: none !important;
+    background-repeat: no-repeat;
+    font-style:italic;
+    color:darkmagenta;
+  }
+.botton{
+  cursor: pointer;
+}
+  div
+  {
+    text-align: center;
+  }
+
+  .test
+  {
+    background-color: #ff8;
+    float: left;
+    width: 100px;
+    height: 50px;
+  }
+
+  .test:first-child
+  {
+    background-color: #f8f;
+   float: none;
+  }
+
+  .test:last-child
+  {
+    background-color: #ff8660;
+    float: right;
+  }
+
+
+
+.dash-up
+{
+  background-color: #4cd964;
+  width:200px;
+  height:100px;
+  float:none;
+
+}
+.dash-up:first-child{
+  background-color:#8ff;
+  float: none;
+}
+
+  .dash-down
+  {
+    background-color: #FF8383;
+    width:200px;
+    height:100px;
+    float:none;
+    bottom: 0px;
+  }
+  .dash-down:first-child{
+    background-color:#0c60ee;
+    float: none;
+    bottom:0px;
+  }
+
+h1{
+  font-weight: 200;
+  font-style:italic;
+  color:red;
+}
+
+  .loading{
+    background-color:white!important;
+    width: 25% !important;
+    border-width: 2px !important;
+    border-color: transparent !important;
+    fill: none;
+  }
+*/

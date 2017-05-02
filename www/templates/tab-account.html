@@ -1,59 +1,82 @@
 <ion-view view-title="Account">
-  <ion-content class="padding" style="text-align: center">
-    <div class="list">
+  <ion-content class="padding">
+    <form class="edit-account">
       <h4> Edit Personal Profile </h4>
-      <div style="float: left; width: 50%;">
-        <label class="item item-input">
-          <input type="text" name="firstName" id="firstName-textarea" ng-model="$parent.firstName" placeholder="Your first name">
-        </label>
+      <list class="edit content">
+        <div style="float: left; width: 50%">
+          <label class="item item-input">
+            <input type="text" name="firstName" id="firstName-textarea" ng-model="$parent.firstName" placeholder="Your first name">
+          </label>
+        </div>
+
+        <div style="float: left; width: 50%">
+          <label class="item item-input">
+            <input type="text" name="lastName" id="lastName-textarea" ng-model="$parent.lastName" placeholder="Your last name">
+          </label>
+        </div>
+
+        <div id="gender" style="float: center; width: 100% height: 200%">
+          <lable class="item item-input">Gender</lable>
+          <!--<input type="checkbox" id="lastName" ng-model="user.gender">-->
+          <select ng-model="$parent.gender">
+            <option value="female">Female</option>
+            <option value="male">Male</option>
+            <option value="na">I Prefer Not To Answer</option>
+          </select>
+
+        </div>
+
+        <div id="email">
+          <label class="item"> Email: {{email}} </label>
+        </div>
+
+        <div id="phone" style="float: left; width: 50%">
+          <label class="item item-input">
+            <input type="text" name="phone" id="phone-textarea" ng-model="$parent.phone" placeholder="Your phone number">
+          </label>
+        </div>
+
+        <div id="city" style="float: left; width: 30%">
+          <label class="item item-input">
+            <input type="text" name="city" id="city-textarea" ng-model="$parent.city" placeholder="Your city">
+          </label>
+        </div>
+
+          <div id="state" style="float: left; width: 20%">
+            <label class="item item-input">
+              <input type="text" name="state" id="state-textarea" ng-model="$parent.state" placeholder="Your state">
+            </label>
+          </div>
+
+        <div id="state">
+          <label class="item item-input">
+            <input type="text" name="pets" id="pets-textarea" ng-model="$parent.pets" placeholder="The kind of pets you have">
+          </label>
+        </div>
+
+          <div id="aboutUser">
+            <label class="item item-input">
+              <input type="text" name="aboutUser" id="aboutUser-textarea" ng-model="$parent.aboutUser" placeholder="Tell Others About You">
+            </label>
+          </div>
+
+        <div id="userPhoto">
+          <label class="item item-input">
+            <input type="file" name="photo" id="photo-fileinput" onchange="angular.element(this).scope().photoSelected(this.files)">
+          </label>
+        </div>
+      </list>
+
+    </form>
+      <div class="edit-profile">
+        <button class="btn btn-account" ng-click="editUserProfile()">Update to the database! </button>
+
+        <button class="btn btn-logout" ng-click="cancel()">Cancel</button>
       </div>
 
 
-      <div style="float: left; width: 50%;">
-        <label class="item item-input">
-          <input type="text" name="lastName" id="lastName-textarea" ng-model="$parent.lastName" placeholder="Your last name">
-        </label>
-      </div>
 
-      <div aligh="left">
-        <label class="item">Your login email: {{email}}</label>
-      </div>
 
-      <div style="float: left; width: 50%;">
-        <label class="item item-input">
-          <input type="text" name="phone" id="phone-textarea" ng-model="$parent.phone" placeholder="Your phone number">
-        </label>
-      </div>
-
-      <div style="float: left; width: 50%;">
-        <label class="item item-input">
-          <input type="text" name="city" id="city-textarea" ng-model="$parent.city" placeholder="Your city">
-        </label>
-      </div>
-
-      <div style="float: left; width: 50%;">
-        <label class="item item-input">
-          <input type="text" name="city" id="state-textarea" ng-model="$parent.state" placeholder="Your state">
-        </label>
-      </div>
-
-      <div style="float: left; width: 50%;">
-        <label class="item item-input">
-          <input type="text" name="pets" id="pets-textarea" ng-model="$parent.pets" placeholder="The kind of pets you have">
-        </label>
-      </div>
-
-      <div style="float: left; width: 50%;">
-        <label class="item item-input">
-          <input type="file" name="photo" id="photo-fileinput" onchange="angular.element(this).scope().photoSelected(this.files)">
-        </label>
-      </div>
-
-    </div>
-
-      <div style="float: none; width: 100%;">
-        <button class="button button-full button-positive" ng-click="editUserProfile()">Update to the database! </button>
-      </div>
 <!---
 need to let user insert their profile picture
       <ImageButton id="@+id/myButton"
