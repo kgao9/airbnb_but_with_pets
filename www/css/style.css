@@ -1,1 +1,219 @@
-/* Empty. Add your own CSS if you like */
+/*
+#4E4E4F;  deep grey - font color
+7D8A2E; dark green - btn hover
+C9D787; shallow green
+FFFFFF; white
+FFC0A9; shallow pink
+FF8598; dark pink - btn
+*/
+
+
+* {
+box-sizing: border-box;
+}
+
+*:focus {
+	outline: none;
+}
+body {
+    background-color: #FFFFFF;
+    /* background-image: url("../img/cat.jpg");*/
+    margin: auto;
+    padding: 10 px;
+}
+
+.login {
+    margin: auto;
+    width: 90%;
+}
+
+.login-screen {
+    background-color: #FFF;
+    padding:  10 px;
+    border-radius: 3 px;
+    margin: 10px;
+    float : center;
+}
+
+/*.app-title h1{
+    text-align: center;
+    color: #4E4E4F;
+}*/
+
+.app-title img{
+    min-width: 100px;
+    max-width: 200px;
+    margin-top: 1vw;
+    float: center;
+}
+/*
+.dash-profile img{
+    min-width: 80px;
+    max-width: 120px;
+}*/
+
+.avatar {
+    max-width: 70px;
+    float: center;
+    margin-top: 1vw;
+    margin-right: 1vw;
+    position: relative;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.image-dash{
+    max-width: 120px;
+    min-width: 100px;
+}
+
+
+.app-logo{
+    max-width: 200px;
+    max-height: 20px;
+    float: center;
+}
+
+.control-group {
+
+}
+
+input {
+    text-align: center;
+    background-color: #ECF0F1;
+    border: 2px solid transparent;
+    border-radius: 3px;
+    font-size: 16px;
+    font-weight: 200;
+    padding: 10px 0;
+    width: 250px;
+    transition: border .3s;
+}
+
+input:focus {
+    border: 1px solid #7D8A2E;
+    box-shadow: none;
+    margin-top: 3vw;
+}
+
+.btn {
+  width: 250px;
+  border: 2px solid transparent;
+  background: #FF8598;
+  color: #ffffff;
+  font-size: 16 px;
+  line-height: 25px;
+  padding: 10px 0;
+  border-radius: 5px;
+  box-shadow: none;
+  transition: 0.25s;
+  display: block;
+  margin: 1em auto;
+  margin-top: 3vw;
+  position: relative;
+  text-transform: uppercase;
+  float: center;
+}
+
+
+.btn-dash {
+    width: 80%;
+    margin-top: 1vw;
+    margin-right: 1vw;
+    margin-left: 1vw;
+}
+.btn-logout{
+    background: #4E4E4F;
+}
+
+.btn-search {
+    width: 100%;
+    margin-top: 2vw;
+    float : center;
+}
+
+.btn-delete{
+    width: 100%;
+    max-height: 50px;
+    text-font: 10px;
+    text-align:center;
+    background: #4E4E4F;
+    border-radius: 0px;
+    position: right;
+
+/*
+   display:block;
+    width: 70px;
+    height: 45px;
+         line-height:20px;
+         border: 2px solid #f5f5f5;
+         color:#FFC0A9;
+         text-align:center;
+         text-font: 10px;
+         text-decoration:none;
+         background: #4E4E4F; /*#4E4E4F;
+         font-size: 16px;
+         font-weight:bold;
+         float: right;
+         */
+}
+
+.btn-small {
+    margin:3vw;
+    float: left;
+    width: 40%;
+}
+
+#btn1, btn2 {
+    display:inline-block;
+}
+
+.btn-hover {
+
+}
+
+
+.login-link {
+  font-size: 12px;
+  color: #4E4E4F; /* deep grey*/
+  display: block;
+  margin-top: 12px;
+  display: block;
+  align-content: center;
+}
+
+.dash-content {
+    margin-top:2vw;
+}
+.divider {
+    width: 100%;
+    align-content: center;
+}
+
+.divider label{
+    width: 100%;
+    float: center;
+    position: relative;
+    margin-right: 5vw;
+    float : center;
+
+}
+.post {
+    margin: 1wv;
+}
+
+.post p{
+    font-size: 12px;
+    color: #4E4E4F;
+}
+
+.post h2{
+    font-size: 16px;
+    color: #FF8598;
+}
+
+.post-content{
+    margin: 1vw;
+    padding: 10px;
+}

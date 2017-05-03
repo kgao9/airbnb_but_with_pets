@@ -1,0 +1,39 @@
+<ion-view view-title="Search Results">
+  <ion-content class="padding">
+    <!--<div ng-show="foundNothing">-->
+    <!--<h3>Nothing has been found! Please check your location and search again! </h3>-->
+    <!--</div>-->
+    <div class="cards-bg social-cards">
+      <ion-list class="wrapper">
+        <ion-item ng-repeat="post in posts track by $index" class="">
+          <ion-card>
+            <div class="item">
+            <ion-avatar item-left class="avatar">
+              <img class="avatar" src={{user.photo}}>
+            </ion-avatar>
+              <h2 class="search-username" style="float: right; align: center; font-weight: bold">{{user.firstName}} {{user.lastName}}</h2>
+              <p>{{user.gender}}</p>
+            </div>
+
+            <ion-label> Contact Me:
+            <form action="mailto:someone@example.com" method="post" enctype="text/plain">
+              <a class="" href="#">{{user.email}}</a>
+            </form>
+            </ion-label>
+
+
+            <ion-card-header class="search-userinfo">
+              <p>@ {{post.city}}, {{post.state}}</p>
+              <p>Post available from: {{post.startDate}} to {{post.endDate}}</p>
+            </ion-card-header>
+            <ion-card-content class="search-message">
+              <p id="messsage">Notes: {{post.message}} </p>
+            </ion-card-content>
+        </ion-card>
+
+      </ion-item>
+      </ion-list>
+
+    </div>
+  </ion-content>
+</ion-view>

@@ -1,17 +1,33 @@
-<ion-view view-title="Login">
+<ion-view view-title="PET HOTEL" xmlns="http://www.w3.org/1999/html">
     <ion-content class="padding">
-        <div class="list list-inset">
-            <label class="item item-input">
-                <input type="text" placeholder="Email" ng-model="$parent.email">
-            </label>
-            <label class="item item-input">
-                <input type="password" placeholder="Password" ng-model="$parent.password">
-            </label>
+       <div class="login center">
+           <div class="login-screen" align="center">
+               <div class="app-title">
+                   <img src="img/petHotel_logo.PNG">
+                   <!--<h1>Login</h1>-->
+               </div>
+
+                <div class="control-group" align="center">
+                    <p>
+                        <label class="login-field-icon fui-user" for="login-email"></label>
+                        <input type="email" class="login-field" id="login-email"
+                               placeholder="Email" ng-model="$parent.email">
+                        </label>
+                    </p>
+                    <p>
+                        <label class="login-field-icon fui-lock" for="login-pass">
+                        <input type="password" class="login-field" id="login-pass" placeholder="Password" ng-model="$parent.password">
+                        </label>
+                    </p>
+
+                </div>
+           </div>
+            <button class="btn" href="#" ng-click="attemptLogin()">LOG IN</button>
+            <button class="btn" href="#" ng-click="attemptCreateUser()">SIGN UP</button>
+            <a class="login-link" href="#" class="button" ng-click="createNewpassword()">Forget password?</a>
         </div>
 
-        <div>
-            <button class="button button-block button-positive" ng-click="attemptLogin()">Login</button>
-            <button class="button button-block button-positive" ng-click="attemptCreateUser()">Sign Up</button>
-        </div>
+
+     </div>
     </ion-content>
 </ion-view>

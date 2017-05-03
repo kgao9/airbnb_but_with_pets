@@ -1,48 +1,74 @@
 <ion-view view-title="Create New Post">
-    <ion-content>
+    <ion-content class="padding">
+        <!-- post purpose: sitter/owner-->
+        <!--<img ng-src="img/post_logo.PNG">-->
+        <ion-item-divider>
+            <ion-list-header>
+                <h4>Pet Type</h4>
+            </ion-list-header>
+            <div class="list" style="float: left; width: 100%;">
+                <ion-checkbox  ng-init="selectPets[item.text]=false" ng-repeat="item in listPets"
+                               ng-model="selectPets[item.text]" ng-change="showPets()" required>
+                    {{ item.text }}
+                </ion-checkbox>
+            </div>
+        </ion-item-divider>
+
+
+        <ion-item-divider>
+            <ion-list-header>
+                <h4>User Identity</h4>
+            </ion-list-header>
         <div class="list" style="float: left; width: 100%;">
-            <ion-label>Purpose: Looking for</ion-label>
-            <ion-radio value="go">pet sitters</ion-radio>
-            <ion-radio checked="false" value="go">pet owners</ion-radio>
+            <ion-checkbox  ng-init="selectUsers[item.text]=false" ng-repeat="item in listUsers"
+                           ng-model="selectUsers[item.text]" ng-change="showUsers()" required>
+                {{ item.text }}
+            </ion-checkbox>
         </div>
+        </ion-item-divider>
 
-        <div class="list" style="float: left; width: 100%;">
-
-            <ion-checkbox>Dog</ion-checkbox>
-            <ion-checkbox>Cat</ion-checkbox>
-        </div>
-
-        <div class="list">
+        <ion-item-divider>
+            <ion-list-header>
+                <h4>LOCATION</h4>
+            </ion-list-header>
+        <ion-list id="location inputs">
             <!-- location information -->
-
+            <div class="location input">
             <label class="item item-input" style="float: left; width: 50%;">
                 <input type="text" name="city" id="city-textarea"
-                       ng-model="$city" placeholder="City">
+                       ng-model="$parent.city" placeholder="City*" required>
             </label>
 
 
-            <label class="item item-input" style="float: left; width: 50%;">
+            <label class="item item-input" style="float: right; width: 50%;">
                 <input type="text" name="state" id="state-textarea"
-                       ng-model="$state" placeholder="State">
+                       ng-model="$parent.state" placeholder="State*" required>
             </label>
+            </div>
+
 
             <!-- time information-->
-            <ion-item>
-                <label>Effective Until</label>
-                <ion-datetime displayFormat="MM/DD/YYYY" min="2017" max="2020-12-31" ng-model="endDate"></ion-datetime>
-            </ion-item>
-
-            <!-- additional message-->
-            <label class="item item-input">
-                <input type="text" name="message" id="message-textarea"
-                       ng-model="$message" placeholder="Enter Additional Messages">
+            <label class="item item-input" style="float: left: width: 100%">
+                Enter a start date:
+                <input type="date" name="startDate" id="startDate"  ng-model="$parent.startDate" max="2020-01-01">
+            </label>
+            <label class="item item-input" style="float: left: width: 100%">
+                Enter an end date:
+                <input type="date" name="endDate" id="endDate"  ng-model="$parent.endDate" min="2017-01-01">
             </label>
 
-        </div>
+            <!-- additional message-->
+            <label class="item item-input" id="message">
+                <input type="text" name="message" id="message-textarea"
+                       ng-model="$parent.message" placeholder="Enter Additional Messages">
+            </label>
+
+        </ion-list>
+        </ion-item-divider>
         <!-- image upload-->
 
-        <button class="button button-full" ng-click="submit()">Submit</button>
-        <button class="button button-full" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-account" ng-click="editPostInfo()">Submit</button>
+        <button class="btn btn-logout" ng-click="cancel()">Cancel</button>
 
     </ion-content>
 </ion-view>

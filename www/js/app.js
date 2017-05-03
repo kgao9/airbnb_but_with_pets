@@ -13,6 +13,10 @@
 
 var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
+//.run(function($ionicPlatform, $rootScope, $ionicHistory) {
+//  $rootScope.$on('stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+//    $ionicHistory.clearCache();
+//  });
 
   .run(function($ionicPlatform) {
 
@@ -24,9 +28,9 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
       if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
 
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
 
-        cordova.plugins.Keyboard.disableScroll(true);
+        cordova.plugins.Keyboard.disableScroll(false);
 
 
       }
@@ -64,7 +68,21 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl:'templates/tab-login.html',
 
-        controller:'LoginCtrl'
+        controller:'LoginCtrl',
+
+        params: { 'user' : {
+            'id': '',
+            'firstName' : '',
+            'lastName' : '',
+            'gender' : '',
+            'email' : '',
+            'phone' : '',
+            'city' : '',
+            'state' : '',
+            'photo' : '',
+            'pets':'',
+            'aboutUser' : ''
+        } }
 
       })
 
@@ -77,7 +95,7 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         abstract: true,
 
-        templateUrl: 'templates/tabs.html'
+        templateUrl: 'templates/tabs.html',
 
       })
 
@@ -92,43 +110,57 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl: 'templates/tab-dash.html',
 
-        controller: 'DashCtrl'
+        controller: 'DashCtrl',
 
-
-      })
-
-
-
-      .state('signup', {
-
-        url: '/signup',
-
-        templateUrl: 'templates/tab-signup.html',
-
-        controller: 'SignupCtrl'
-
-
-      })
-
-
-      .state('chats', {
-
-        url: '/chats',
-
-        templateUrl: 'templates/tab-chats.html',
-
-        controller: 'ChatsCtrl'
+        params: { 'user' : {
+                    'id': '',
+                    'firstName' : '',
+                    'lastName' : '',
+                    'gender' : null,
+                    'email' : '',
+                    'phone' : '',
+                    'city' : '',
+                    'state' : '',
+                    'photo' : '',
+                    'pets':'',
+                    'aboutUser' : ''
+                } }
 
       })
 
-      .state('chat-detail', {
 
-        url: '/chats/:chatId',
+//
+//      .state('signup', {
+//
+//        url: '/signup',
+//
+//        templateUrl: 'templates/tab-signup.html',
+//
+//        controller: 'SignupCtrl'
+//
+//
+//      })
 
-        templateUrl: 'templates/chat-detail.html',
 
-        controller: 'ChatDetailCtrl'
-      })
+//      .state('chats', {
+//
+//        url: '/chats',
+//
+//        templateUrl: 'templates/tab-chats.html',
+//
+//        controller: 'ChatsCtrl',
+//
+//      })
+
+//      .state('chat-detail', {
+//
+//        url: '/chats/:name',
+//
+//        templateUrl: 'templates/chat-detail.html',
+//
+//        controller: 'ChatDetailCtrl',
+//
+//      })
 
 
       .state('account', {
@@ -137,7 +169,21 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl: 'templates/tab-account.html',
 
-        controller: 'AccountCtrl'
+        controller: 'AccountCtrl',
+
+        params: { 'user' : {
+                    'id': '',
+                    'firstName' : '',
+                    'lastName' : '',
+                    'gender' : '',
+                    'email' : '',
+                    'phone' : '',
+                    'city' : '',
+                    'state' : '',
+                    'photo' : '',
+                    'pets':'',
+                    'aboutUser' : ''
+                } }
 
       })
 
@@ -147,7 +193,41 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl: 'templates/tab-search.html',
 
-        controller: 'SearchCtrl'
+        controller: 'SearchCtrl',
+
+        params: {
+
+          'city' : "",
+
+          'state' : "",
+
+          'userIdentity' : { 'Sitter' : false,  'Owner': false },
+
+          'pet' : { 'Dogs' : false,  'Cats': false, 'Fish': false}
+
+        }
+
+      })
+
+      .state('searchResult', {
+
+        url: '/searchResult',
+
+        templateUrl: 'templates/search-result.html',
+
+        controller: 'SearchResultCtrl',
+
+        params: {
+
+          'city' : "",
+
+          'state' : "",
+
+          'userIdentity' : { 'Sitter':false,  'Owner':false },
+
+          'pet' : { 'Dogs':false,  'Cats':false, 'Fish': false}
+
+        }
 
       })
 
@@ -158,11 +238,33 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl: 'templates/tab-blog.html',
 
-        controller: 'BlogCtrl'
+        controller: 'BlogCtrl',
+
+        params: {
+          'uid': '',
+          'purpose' : '',
+          'pets' : '',
+          'city' : '',
+          'state' : '',
+          'startDate' : '',
+          'endDate' : '',
+          'active' : '',
+          'message' : ''
+
+        }
 
 
       })
 
+//      .state('gps', {
+//
+//        url: '/gps',
+//
+//        templateUrl: 'templates/blog-gps.html',
+//
+//        //   controller: 'gpsCtrl'
+//
+//      })
 
       .state('newPost', {
 
@@ -170,7 +272,21 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
 
         templateUrl: 'templates/blog-newpost.html',
 
-        controller: 'NewPostCtrl'
+        controller: 'NewPostCtrl',
+
+        params: {
+          'uid': '',
+          'purpose' : '',
+          'pets' : '',
+          'city' : '',
+          'state' : '',
+          'startDate' : '',
+          'endDate' : '',
+          'active' : '',
+          'message' : ''
+
+        }
+
 
       });
 
@@ -180,5 +296,10 @@ var starter = angular.module('starter', ['ionic', 'starter.controllers', 'starte
     $urlRouterProvider.otherwise('/login');
 
 
-  });
+    }).run(function($ionicPlatform, $rootScope, $ionicHistory) {
 
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+
+        $ionicHistory.clearCache();
+    });
+});
