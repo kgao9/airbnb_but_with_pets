@@ -7,11 +7,12 @@
       <ion-list class="wrapper">
         <ion-item ng-repeat="post in posts track by $index" class="">
           <ion-card>
-            <div class="item">
+            <div class="search-result-header">
             <ion-avatar item-left class="avatar">
-              <img class="avatar" src={{user.photo}}>
+              <img ng-show="!defaultUser" class="avatar" src={{user.photo}}>
+              <img ng-show="defaultUser" class="avatar" src=img/default_avatar.jpg>
             </ion-avatar>
-              <h2 class="search-username" style="float: right; align: center; font-weight: bold">{{user.firstName}} {{user.lastName}}</h2>
+              <h2 class="search-username" style="clear: center; align: center; font-weight: bold">{{user.firstName}} {{user.lastName}}</h2>
               <p>{{user.gender}}</p>
             </div>
 

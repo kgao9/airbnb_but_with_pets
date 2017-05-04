@@ -13,39 +13,32 @@ starter.controller('LoginCtrl', function($scope, $stateParams, $ionicLoading, $s
   });
 
   $scope.createUser = function(email, password) {
-   try{
-        return firebase.auth().createUserWithEmailAndPassword(email,password).then(function(){
-
-          // after creating account in auth, also create user in guests database
-          var user = firebase.auth().currentUser;
-          var userInfo = $stateParams.user;
-          var uid = user.uid;
-          userInfo.id = uid;    // update user id
-          userInfo.email = user.email;  //update email
-          console.log(userInfo)
-          firebase.database().ref('/guests').child(uid).set(userInfo).then(function(){
-            $ionicLoading.show({template:'Created New User!',noBackdrop:true,duration:2000});
-          });
-
-        })
-    } catch(error){
-            var errorCode=error.code;
-            var errorMessage=error.message;
-            console.log(errorMessage)
-            $ionicLoading.show({template:'Fail to Create New User! Try again!',noBackdrop:true,duration:2000});
+      return firebase.auth().createUserWithEmailAndPassword(email,password).then(function(){
+        // after creating account in auth, also create user in guests database
+                  var user = firebase.auth().currentUser;
+                  var userInfo = $stateParams.user;
+                  var uid = user.uid;
+                  userInfo.id = uid;    // update user id
+                  userInfo.email = user.email;  //update email
+                  console.log(userInfo)
+        firebase.database().ref('/guests').child(uid).set(userInfo).then(function(){
+        $ionicLoading.show({template:'Created New User!',noBackdrop:true,duration:1000});
+      });
+    }).catch(function(error){
+              var errorCode=error.code;
+              var errorMessage=error.message;
+              console.log(errorMessage)
+              $ionicLoading.show({template:'Fail to Create New User! Try again!',noBackdrop:true,duration:1000});
+            });
     };
-  };
 
   $scope.login = function(email, password) {
-  try{
-    return firebase.auth().signInWithEmailAndPassword(email, password)
-  } catch(err) {
-          var errorCode = err.code;
-          var errorMessage = err.message;
-          console.log("here is an error")
-          $ionicLoading.show({template:'Please enter a valid email address',noBackdrop:true,duration:2000});
+      return firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+      });
     };
-  };
+
 
   $scope.attemptCreateUser = function(){
     $scope.createUser($scope.email,$scope.password);
@@ -125,8 +118,12 @@ starter.controller('DashCtrl', function($scope, $state, $stateParams, $ionicLoad
 //            console.log(snapshot.__proto__.val)
 //            console.log('.')
             var val = snapshot.val()
-            var firstKey = Object.keys(val)[0]
-            var user = val[firstKey]
+            if (val){
+                var firstKey = Object.keys(val)[0]
+                var user = val[firstKey]
+            } else {
+                user = $stateParams.user;
+            }
 
 //            console.log(Object.keys)
 //            console.log(Object.values)
@@ -400,22 +397,22 @@ starter.controller('NewPostCtrl',function($scope, $ionicModal, $ionicLoading, $s
 //    post.endDate = ""
 //    post.message = "";
 //    post.active = true;
-if ($scope.selectUsers==null||$scope.startDate==null||$scope.endDate==null|| $scope.selectPets==null|| $scope.city==null||$scope.state==null){
-  $ionicLoading.show({template:'Please fill in all information ',noBackdrop:true, duration:2000});
-}else {
-  post.uid = firebase.auth().currentUser.uid;
-  post.purpose = $scope.selectUsers;
-  post.startDate = $scope.startDate;
-  post.endDate = $scope.endDate;
-  post.pets = $scope.selectPets;
-  post.city = $scope.city;
-  post.state = $scope.state;
-  // var button = FindViewById<ImageButton> (Resource.Id.myButton);
-  if ($scope.message != null) {
-    post.message = $scope.message;
-  }
-  post.active = true;
-}
+    if ($scope.selectUsers==null||$scope.startDate==null||$scope.endDate==null|| $scope.selectPets==null|| $scope.city==null||$scope.state==null){
+      $ionicLoading.show({template:'Please fill in all information ',noBackdrop:true, duration:2000});
+    }else {
+      post.uid = firebase.auth().currentUser.uid;
+      post.purpose = $scope.selectUsers;
+      post.startDate = $scope.startDate;
+      post.endDate = $scope.endDate;
+      post.pets = $scope.selectPets;
+      post.city = $scope.city;
+      post.state = $scope.state;
+      // var button = FindViewById<ImageButton> (Resource.Id.myButton);
+      if ($scope.message != null) {
+        post.message = $scope.message;
+      }
+      post.active = true;
+    }
 
 
 
@@ -428,7 +425,7 @@ if ($scope.selectUsers==null||$scope.startDate==null||$scope.endDate==null|| $sc
       var petSelected = post.pets.Dogs == true || post.pets.Cats == true || post.pets.Fish == true;
       var purposeSelected = post.purpose.Sitter == true || post.purpose.Owner == true;
       var validLocation = post.city != "" || post.state != "";
-      var validTime = post.startDate > post.endDate;
+      var validTime = post.startDate && post.endDate;
 
       if (petSelected && purposeSelected && validLocation && validTime) {
         //console.log('valid post inputs')
@@ -462,7 +459,6 @@ if ($scope.selectUsers==null||$scope.startDate==null||$scope.endDate==null|| $sc
                           });
             alertPopup
       }
-
   }
         $scope.cancel = function () {
           $state.go('blog');
@@ -566,7 +562,6 @@ starter.controller('SearchResultCtrl', function($scope, $stateParams, $state, $i
             post.message = data.val().message;
             post.userIdentity = data.val().purpose;
             post.pet = data.val().pets;
-
             post.userInfo = getUserInfo(post.uid);
             //console.log(getUserInfo(post.uid))
             // TODO: here, put user info init post{}
@@ -578,12 +573,8 @@ starter.controller('SearchResultCtrl', function($scope, $stateParams, $state, $i
 
             // user enter info about user identity and pet
             if (!emptyInputIdentity($stateParams.userIdentity) && !emptyInputPet($stateParams.pet)) {
-                //console.log("enter 1");
-                //console.log("test here:");
                 for (var i=selectedPosts.length-1; i>=0; i--) {
                     var currPost = selectedPosts[i];
-                   // console.log($stateParams.pet);
-                //console.log(currPost.pet);
                     if (!samePet($stateParams.pet, currPost.pet) ||
                         !sameIdentity($stateParams.userIdentity, currPost.userIdentity)) {
                         // if found mismatch, remove
@@ -644,10 +635,13 @@ starter.controller('SearchResultCtrl', function($scope, $stateParams, $state, $i
             return
         }
         var user = snapshot.val();
-        //console.log(user)
+        if(!user.photo){
+            $scope.defaultUser = true;
+        } else {
+            $scope.defaultUser = false;
+        }
         $scope.user = user[uid];
         // TODO: retrieve user info and put init post{}
-
     });
   }
 
@@ -693,6 +687,7 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
           $state.go('login');
       } else  {
       init();
+      console.log(user.email)
 
   $scope.photo = "";
   $scope.newPhoto = "";
@@ -750,34 +745,7 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
     }
     //console.log("guest added to Firebase");
   };
-      function init() {
-          if (user){
-              var firstName, lastName, email, phone, city, state, pets, photoUrl, aboutUser;
-              var ref = firebase.database().ref("guests");
-                 ref.orderByChild('id').equalTo(user.uid).on("value", function(snapshot){
-                      if (!snapshot.val()){
-                        //console.log('no user info')
-                        return
-                      }
-                      var userDB = Object.values(snapshot.val())[0]; // obtain user infor from firebase
-                      // console.log(userDB.email)
-                      // $scope.user = userDB;
-                      $scope.firstName = userDB.firstName;
-                      $scope.lastName = userDB.lastName;
-                      $scope.email = userDB.email;
-                      $scope.phone = userDB.phone;
-                      $scope.city = userDB.city;
-                      $scope.state = userDB.state;
-                      $scope.pets = userDB.pets;
-                      $scope.photo = userDB.photo;
-                      $scope.aboutUser = userDB.aboutUser;
 
-                 });
-          } else {
-              $ionicLoading.show({ template: 'Please login to Firebase first!', noBackdrop: true, duration: 2000 });
-              $state.go('login');
-          }
-    };
 
   $scope.photoSelected = function(files) {
     $scope.newPhoto = files[0]
@@ -801,5 +769,38 @@ starter.controller('AccountCtrl', function($scope, $ionicModal, $ionicLoading, $
     $state.go('dash', {}, {reload:true});
   };
 }
+
+function init() {
+          if (user){
+              // var firstName, lastName, email, phone, city, state, pets, photoUrl, aboutUser;
+              var ref = firebase.database().ref("guests");
+                 ref.orderByChild('id').equalTo(user.uid).on("value", function(snapshot){
+                      if (!snapshot.val()){
+                        //console.log('no user info')
+                        return
+                      }
+                      // obtain user infor from firebase
+                      // var userDB = Object.values(snapshot.val())[0];
+                      var firstKey = Object.keys(snapshot.val())[0];
+                      var userDB = snapshot.val()[firstKey];
+
+                      // console.log(userDB.email)
+                      // $scope.user = userDB;
+                      $scope.firstName = userDB.firstName;
+                      $scope.lastName = userDB.lastName;
+                      $scope.email = userDB.email;
+                      $scope.phone = userDB.phone;
+                      $scope.city = userDB.city;
+                      $scope.state = userDB.state;
+                      $scope.pets = userDB.pets;
+                      $scope.photo = userDB.photo;
+                      $scope.aboutUser = userDB.aboutUser;
+
+                 });
+          } else {
+              $ionicLoading.show({ template: 'Please login to Firebase first!', noBackdrop: true, duration: 2000 });
+              $state.go('login');
+          }
+    };
 
 });
