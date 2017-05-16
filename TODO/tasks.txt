@@ -1,0 +1,48 @@
+Task name: name of task to complete
+Uname: github username of person who wants to do the task
+Reviewed: Did the admin review the feature and agree to let the changes persist?
+RTR: Ready to review - is it ready for the admin to review?
+
+Task name:                              Uname:            RTR:                       Reviewed:
+Redo Sign up to allow only real and
+verified user accounts
+
+Make signup an actual sign up page
+
+UI consistency and revamp CSS 
+architecture
+
+Make posting more user interactive
+Want to only focus on one animal 
+first
+
+About page
+
+Terms and Conditions - warn users that
+using this app comes with its own risks
+Note: user doing this should search up
+laws and legal documents regarding
+property damage and who's responsible
+and what documents are needed for 
+liability issues
+
+Create README for the project
+
+Search only by location using google
+map's api
+
+On post page, make poster's contact
+information CLEAR.
+
+Revamp backend schema to be faster
+and more maintainable
+
+update documentation                    kgao9             No                             
+    -MVC workflow images
+    -TODO tasks
+    -specifications and requirements
+    -who's the current admin (admins graduate)
+
+make separate controller, state, and view
+files
+
