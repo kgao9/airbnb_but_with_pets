@@ -46,3 +46,4 @@ update documentation                    kgao9             No
 make separate controller, state, and view
 files
 
+Move search to outside login page
