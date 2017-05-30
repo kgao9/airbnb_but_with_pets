@@ -1,4 +1,5 @@
 {
-  "name": "blank",
-  "app_id": ""
+  "name": "myNewProject",
+  "app_id": "",
+  "type": "ionic-angular"
 }
